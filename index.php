@@ -64,8 +64,8 @@
                 <img src="./img/fox-body.png" alt="img" class="top-image">
                 <h2>Get started today and take control of your time! <br> Begin harnessing the power of efficient scheduling.</h2>
                 <br>
-                <div class="signup"><a href="./main/signup.php">Sign Up</a></div>
-                <div class="login"><a href="./main/login.php">Log In</a></div> 
+                <div class="signup"><a href="./login-form/signup.php">Sign Up</a></div>
+                <div class="login"><a href="./login-form/login.php">Log In</a></div> 
             </div>
         </div>
     </main>
