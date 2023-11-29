@@ -1,0 +1,23 @@
+<footer class="footer">
+            <div class="footer-col">
+                <img src="../img/ccsp.png" height="50px" width="200px">
+            </div>
+            <div class="footer-col">
+                <h2>Company</h2>
+                <ul>
+                    <li><a href="mission-vision.php">Mission and Vision</a></li>
+                    <li><a href="privacy-policy.php">Privacy Policy</a></li>
+                    <li><a href="faqs.php">FAQ'S</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h2>Socials</h2>
+                <div class="socials">
+                    <a href="https://www.facebook.com/dhvsu.ccssc"><i class="fa fa-facebook"></i></a>
+                    <a href="mailto:adm1n.ccspace@gmail.com"><i class="fa fa-envelope"></i></a>
+                    <a href="https://dhvsu.edu.ph/index.php/academics-menu/bacolor-campus/college-of-computer-studies"><i class="fa fa-globe"></i></a>
+                </div>
+            </div>
+            <div class="footer-copyright"><p>Copyright ©2023 CCSpace. All Rights Reserved.</p></div>
+
+</footer>
