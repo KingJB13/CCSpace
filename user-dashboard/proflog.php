@@ -31,6 +31,7 @@
             border-collapse: collapse;
             min-width: 400px;
             margin: 20px;
+            table-layout: fixed;
         }
         thead{
             background-color: #1F4172;
@@ -54,7 +55,11 @@
             vertical-align: top;
             text-align: left;
         }
-
+        @media(max-width: 952px){
+            th, td{
+                font-size: 10px;
+            }
+        }
 
     </style>
 </head>
@@ -81,6 +86,7 @@
                             <th>Section</th>
                             <th>Time In</th>
                             <th>Time Out</th>
+                            <th>Remarks</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,6 +101,7 @@
                                 echo "<td>".$proflog['section']."</td>";
                                 echo "<td>".$proflog['time_start']."</td>";
                                 echo "<td>".$proflog['time_end']."</td>";
+                                echo "<td>".$proflog['remarks']."</td>";
                                 echo "</tr>";
                             }
                         ?>

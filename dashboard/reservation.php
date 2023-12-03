@@ -54,6 +54,7 @@
         table {
             border-collapse: collapse;
             width: 100%;
+            table-layout: fixed;
         }
         thead{
             background-color: #1F4172;
@@ -85,6 +86,11 @@
         .reservation td{
             vertical-align: top;
             text-align: center;
+        }
+        @media(max-width: 952px){
+            th, td{
+                font-size: 10px;
+            }
         }
     </style>
 </head>

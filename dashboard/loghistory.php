@@ -29,6 +29,7 @@
             border-collapse: collapse;
             min-width: 400px;
             margin: 20px;
+            table-layout: fixed;
         }
         thead{
             background-color: #1F4172;
@@ -79,6 +80,7 @@
                             <th>Section</th>
                             <th>Time In</th>
                             <th>Time Out</th>
+                            <th>Remarks</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,6 +95,7 @@
                             echo "<td>".$log['section']."</td>";
                             echo "<td>".$log['time_start']."</td>";
                             echo "<td>".$log['time_end']."</td>";
+                            echo "<td>".$log['remarks']."</td>";
                             echo "</tr>";
                         }
                         ?>
