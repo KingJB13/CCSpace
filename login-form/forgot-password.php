@@ -2,28 +2,46 @@
   session_start();
   require_once '../configuration/dbcon.php';
   require_once 'mail.php';
-  if(isset($_POST['forgot_password'])){
-      try{
-        $email = $_POST['email'];
+  
+  try{
+    if(isset($_POST['forgot_password'])){
+      $emailPattern = '/^[a-zA-Z0-9._%+-]+@dhvsu\.edu\.ph$/';
+      $email = $_POST['email'];
+      $token = bin2hex(random_bytes(16));
+      $expiry = date("Y-m-d H:i:s", time() + 60 * 30);
+      if (!preg_match($emailPattern, $email)) {
+        $error = 'Not a dhvsu account';  
+      } else {
         $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
         $stmt = $pdo->prepare($sql);
         $stmt -> bindParam(':email',$email);
         $stmt -> execute();
         $row = $stmt->fetch();
-
-        if($stmt->rowCount() > 0){
-            $_SESSION['recover_id'] = $row['ccs_id'];
-            $_SESSION['email'] = $row['ccs_email'];
-            $recipient = $_SESSION['email'];
-            $subject = "Password Recovery";
-            $message = "We received a request to reset your password. Kindly click the below link to reset your password. http://localhost/CCSpace/login-form/reset-password.php";
+    
+        if($row['ccs_email'] === $email){
+          $sql = "UPDATE ccs_user SET reset_token_hash = :token , reset_token_expiry = :expire WHERE ccs_email = :email";
+          $stmt = $pdo->prepare($sql);
+          $stmt -> bindParam(':token', $token);
+          $stmt -> bindParam(':expire', $expiry);
+          $stmt -> bindParam(':email', $email);
+          $stmt -> execute();
+          if($stmt->rowCount() > 0){
+            $message = "We received a request to reset your password. Click the link to reset your password: http://localhost/CCSpace/login-form/reset-password.php?token=$token";
+            $subject = "Password Reset";
+            $recipient = $email;
             send_mail($recipient, $subject, $message);
+            echo "<script>alert('Check your inbox for a password reset link');</script>";
+          }
         }
       }
-      catch(PDOException $e){
-        error_log("Error: " . $e->getMessage());
-        header("Location: ../index.php");
-      }
+      
+  }
+    
+  }
+  catch(PDOException $e){
+    $error_log = "Error: " . $e->getMessage();
+    echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+    exit();
   }
 ?>
 
@@ -68,6 +86,19 @@
     .wrapper .form .inputfield:nth-child(7){
         margin-bottom: 20px;
     }
+    .wrapper .form .inputfield[data-error] .input{
+        border-color: #c92432;
+        color: #c92432;
+        background: #fffafa;
+      }
+
+      .wrapper .form .inputfield[data-error]::after{
+          content: attr(data-error);
+          font-size: 16px;
+          color: #c92432;
+          display: block;
+          margin: 10px 0;
+      }
 
     .wrapper .form .inputfield label{
       width: 200px;
@@ -145,12 +176,8 @@
             <div class="title">
              Enter Email
             </div>
-            <?php if(isset($error_message)):?>
-                <div id="error" style="color:red"><p><?php echo $error_message?></p></div>
-            <?php endif;?>
-            
             <form action="forgot-password.php" method="POST" class="form">
-                <div class="inputfield">
+                <div class="inputfield" <?php echo isset($error) ? 'data-error="' . htmlspecialchars($error) . '"' : ''; ?>>
                     <label>Email Address</label>
                     <input type="text" class="input" id="email" name="email" required>
                 </div> 

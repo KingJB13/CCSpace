@@ -6,40 +6,51 @@
       try{
         $email = $_POST['email'];
         $enteredPassword = $_POST['password'];
-  
-        $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':email', $email);
-        if($stmt->execute()){
-            $user = $stmt->fetch();
+        $emailPattern = '/^[a-zA-Z0-9._%+-]+@dhvsu\.edu\.ph$/';
 
-            if ($user) {
-                $hashedPassword = $user['ccs_password'];
-                if (password_verify($enteredPassword, $hashedPassword)) {
-                    $_SESSION['ccs_id'] = $user['ccs_id'];
-                    $_SESSION['username'] = $user['ccs_firstname']." ".$user['ccs_lastname'];
-                    $_SESSION['position'] = $user['ccs_position'];
-                    
-                    if($_SESSION['position'] == 'Admin'){
-                      header("Location: ../dashboard/dashboard.php");
-                    }
-                    else{
-                      header("Location: ../main/home.php");
-                    }
-                } else {
-                    $error_message = "Invalid email or password";
-                }
-            } else {
-                $error_message = "Invalid email or password";
-            }
+        if (!preg_match($emailPattern, $email)) {
+          $error = 'Not a dhvsu account';
+        } elseif (strlen($enteredPassword) < 8 || strlen($enteredPassword) > 32) {
+          $password_error = 'Password must be 8 - 32 characters long';
+        } else {
+          $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
+          $stmt = $pdo->prepare($sql);
+          $stmt->bindParam(':email', $email);
+          if($stmt->execute()){
+              $user = $stmt->fetch();
+  
+              if ($user) {
+                  $hashedPassword = $user['ccs_password'];
+                  if (password_verify($enteredPassword, $hashedPassword)) {
+                      $_SESSION['ccs_id'] = $user['ccs_id'];
+                      $_SESSION['username'] = $user['ccs_firstname']." ".$user['ccs_lastname'];
+                      $_SESSION['position'] = $user['ccs_position'];
+                      
+                      if($_SESSION['position'] == 'Admin'){
+                        header("Location: ../dashboard/dashboard.php");
+                      }
+                      else{
+                        header("Location: ../main/home.php");
+                      }
+                  } else {
+                    echo '<script>alert("Invalid Password");window.location.href = "signup.php";</script>';
+                  }
+              } else {
+                echo '<script>alert("User does not Exist");</script>';
+              }
+          }
+          else{
+              $error_message = "Error: " . $sql . "<br>" . $pdo->error;
+              echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+
+          }
         }
-        else{
-            $error_message = "Error: " . $sql . "<br>" . $pdo->error;
-        }
+
       }
       catch(PDOException $e){
-        error_log("Error: " . $e->getMessage());
-        header("Location: ../index.php");
+        $error_log = "Error: " . $e->getMessage();
+        echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+        exit();
       }
   }
 ?>
@@ -84,6 +95,21 @@
 
     .wrapper .form .inputfield:nth-child(7){
         margin-bottom: 20px;
+    }
+
+
+    .wrapper .form .inputfield[data-error] .input{
+      border-color: #c92432;
+      color: #c92432;
+      background: #fffafa;
+    }
+
+    .wrapper .form .inputfield[data-error]::after{
+        content: attr(data-error);
+        font-size: 16px;
+        color: #c92432;
+        display: block;
+        margin: 10px 0;
     }
 
     .wrapper .form .inputfield label{
@@ -162,17 +188,14 @@
             <div class="title">
              Login
             </div>
-            <?php if(isset($error_message)):?>
-                <div id="error" style="color:red"><p><?php echo $error_message?></p></div>
-            <?php endif;?>
             
             <form action="login.php" method="POST" class="form">
-                <div class="inputfield">
+                <div class="inputfield" <?php echo isset($error) ? 'data-error="' . htmlspecialchars($error) . '"' : ''; ?>>
                     <label>Email Address</label>
                     <input type="text" class="input" id="email" name="email" required>
                  </div> 
 
-                 <div class="inputfield">
+                 <div class="inputfield" <?php echo isset($password_error) ? 'data-error="' . htmlspecialchars($password_error) . '"' : ''; ?>>
                     <label>Password</label>
                     <input type="password" class="input" id="password" name="password" required>
                  </div>  

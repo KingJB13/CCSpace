@@ -2,44 +2,28 @@
   session_start();
   require_once '../configuration/dbcon.php';
 
-  if(isset($_POST['reset'])){
-      try{
-        $password = $_POST['password'];
-        $confirmpassword = $_POST['confirm_password'];
-
-        if($password == $confirmpassword){
-            $id = $_SESSION['recover_id'];
-            $passwordhash = password_hash($confirmpassword, PASSWORD_BCRYPT);
-            $sql = "SELECT * FROM ccs_user WHERE ccs_id = :id";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(":id", $id);
-            $stmt->execute();
-            $row = $stmt->fetch();
-
-            if($row['ccs_id']){
-                $sql = "UPDATE ccs_user SET ccs_password = :password WHERE ccs_id = :id";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(":password", $passwordhash);
-                $stmt->bindParam(":id", $row['ccs_id']);
-                if($stmt->execute()){
-                    echo "<script>alert('Password Successfully Reset!'); window.location='login.php'</script>";
-                    session_destroy();
-                    header("Location: login.php");
-                    exit();
-                }
-                else{
-                    echo "<script>alert('Error in updating the account');</script>";
-                    header("Refresh: 0");
-                }
-            }
-        }
+  try {
+    $token = $_GET['token'];
   
+    $sql = "SELECT * FROM ccs_user WHERE reset_token_hash = :token";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":token", $token);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if(empty($result['reset_token_hash'])){
+      echo '<script>alert("token not found");</script>';
     }
-      catch(PDOException $e){
-        error_log("Error: " . $e->getMessage());
-        header("Location: ../index.php");
-      }
+    
+    if(strtotime($result['reset_token_expiry']) <= time()){
+      echo '<script>alert("Token expired, please generate a new token.");</script>';
+    }
+  } catch (PDOException $e) {
+    $error_log = "Error: " . $e->getMessage();
+    echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+    exit();
   }
+
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +67,19 @@
     .wrapper .form .inputfield:nth-child(7){
         margin-bottom: 20px;
     }
+    .wrapper .form .inputfield[data-error] .input{
+        border-color: #c92432;
+        color: #c92432;
+        background: #fffafa;
+      }
 
+      .wrapper .form .inputfield[data-error]::after{
+          content: attr(data-error);
+          font-size: 16px;
+          color: #c92432;
+          display: block;
+          margin: 10px 0;
+      }
     .wrapper .form .inputfield label{
       width: 200px;
       color: #757575;
@@ -158,18 +154,15 @@
         
         <div class="wrapper">
             <div class="title">
-             Login
-            </div>
-            <?php if(isset($error_message)):?>
-                <div id="error" style="color:red"><p><?php echo $error_message?></p></div>
-            <?php endif;?>
-            
-            <form action="login.php" method="POST" class="form">
-                 <div class="inputfield">
+              Reset Password
+            </div>            
+            <form action="reset-password-process.php" method="POST" class="form">
+                <input type="hidden" name="token" value="<?php echo htmlspecialchars($token)?>">
+                 <div class="inputfield" <?php echo isset($confirm_error) ? 'data-error="' . htmlspecialchars($confirm_error) . '"' : ''; ?>>
                     <label>New Password</label>
                     <input type="password" class="input" id="password" name="password" required>
                  </div>  
-                 <div class="inputfield">
+                 <div class="inputfield" <?php echo isset($confirmerror) ? 'data-error="' . htmlspecialchars($confirmerror) . '"' : ''; ?>>
                     <label>Confirm Password</label>
                     <input type="password" class="input" id="password" name="confirm_password"> 
                  </div>

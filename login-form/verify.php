@@ -1,9 +1,9 @@
 <?php
     session_start();
     require_once '../configuration/dbcon.php';
-    require_once 'mail.php';
 
-    if(isset($_POST['verify'])){
+    try{
+      if(isset($_POST['verify'])){
         $otp = $_POST['otp'];
         $email = $_SESSION['email'];
         $password = $_SESSION['password'];
@@ -12,7 +12,9 @@
         $middlename = $_SESSION['middlename'];
         $position = $_SESSION['position'];
         $originalotp = $_SESSION['otp'];
+
         $passwordhash = password_hash($password, PASSWORD_BCRYPT);
+
         if($otp == $originalotp){
             $sql = 'INSERT INTO ccs_user(ccs_id, ccs_email, ccs_password, ccs_firstname, ccs_lastname, ccs_middlename, ccs_position) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :email, :password, :firstname, :lastname, :middlename, :position)';
             $stmt = $pdo->prepare($sql);
@@ -23,19 +25,21 @@
             $stmt -> bindParam(':middlename', $middlename);
             $stmt -> bindParam(':position', $position);
             if($stmt->execute()){
-                $message = 'Account Created Successfully';
-                header("Location: login.php");
+                echo '<script>alert("Account Created Successfully");window.location.href = "login.php";</script>';
                 exit();
             }
             else{
                 echo '<script>alert("Error Creating Account")</script>';
-                header("Refresh: 0");
-            }
-            
+            } 
         }else {
             echo '<script>alert("Invalid OTP")</script>';
-            header("Refresh: 0");
         }
+      }
+    }
+    catch(PDOException $e){
+      $error_log = "Error: " . $e->getMessage();
+      echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+      exit();
     }
 ?>
 <!DOCTYPE html>
@@ -203,9 +207,6 @@
             <div class="title">
               Verification
             </div>
-            <?php if(isset($error_message)):?>
-                <div id="error" style="color:red"><p><?php echo $error_message?></p></div>
-            <?php endif;?>
             <form action="verify.php" method="POST" class="form" id ="form">              
                 <div class="inputfield">
                 <label>Insert OTP</label>

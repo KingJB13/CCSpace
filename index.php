@@ -93,8 +93,5 @@
         <div class="footer-copyright"><p>Copyright ©2023 CCSpace. All Rights Reserved.</p></div>
 
 </footer>
-
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

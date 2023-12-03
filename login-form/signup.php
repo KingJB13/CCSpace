@@ -1,69 +1,63 @@
 <?php
 if(isset($_POST['register'])){
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm-password'];
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $middlename = $_POST['middlename'];
-    $position = $_POST['option'];
-    $emailPattern = '/^[a-zA-Z0-9._%+-]+@dhvsu\.edu\.ph$/';
-    $namePattern = '/^[A-Za-z]+(?: [A-Za-z]+)*$/';
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  $confirm_password = $_POST['confirm-password'];
+  $firstname = $_POST['firstname'];
+  $lastname = $_POST['lastname'];
+  $middlename = $_POST['middlename'];
+  $position = $_POST['option'];
+  $emailPattern = '/^[a-zA-Z0-9._%+-]+@dhvsu\.edu\.ph$/';
+  $namePattern = '/^[A-Za-z]+(?: [A-Za-z]+)*$/';
 
-    if (strlen($password) < 8 || strlen($password) > 32) {
-      $password_error = 'Password must be 8 - 32 characters long';
-    }
-    else{
-      if($password !== $confirm_password){
-        $confirmerror = 'Passwords do not match';
-      }
-    }
+  if (!preg_match($emailPattern, $email)) {
+    $error = 'Not a dhvsu account';  
+  } elseif (strlen($password) < 8 || strlen($password) > 32) {
+    $password_error = 'Password must be 8 - 32 characters long';
+  } elseif($password !== $confirm_password){
+      $confirmerror = 'Passwords do not match';
+  } elseif (!preg_match($namePattern, $firstname)) {
+    $firsterror = 'Name should only contain letters';
+  } elseif (!preg_match($namePattern, $lastname)) {
+    $lasterror = 'Name should only contain letters';
+  } if (!empty($middlename) && !preg_match($namePattern, $middlename)) {
+    $middleerror = 'Middle name should only contain letters';
+  } else {
+      session_start();
+      require_once '../configuration/dbcon.php';
+      require_once 'mail.php';
 
-    if (!preg_match($namePattern, $firstname)) {
-      $firsterror = 'Name should only contain letters';
-    }
+      $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindParam(":email", $email);
+      $stmt->execute();
 
-    if (!preg_match($namePattern, $lastname)) {
-      $lasterror = 'Name should only contain letters';
-    }
-
-    if (!preg_match($namePattern, $middlename)) {
-      $middleerror = 'Name should only contain letters';
-    }
-
-    if (!preg_match($emailPattern, $email)) {
-        $error = 'Not a dhvsu account';
-        
-    } else {
-        session_start();
-        require_once '../configuration/dbcon.php';
-        require_once 'mail.php';
-
-        $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(":email", $email);
-        $stmt->execute();
-
-        if ($stmt->rowCount() > 0) {
-            $error = 'Email Already Exist';
-        } else {
-            $_SESSION['email'] = $email;
-            $_SESSION['password'] = $confirm_password;
-            $_SESSION['firstname'] = $firstname;
-            $_SESSION['lastname'] = $lastname;
-            $_SESSION['middlename'] = $middlename;
-            $_SESSION['position'] = $position;
-            $otp = rand(100000, 999999);
-            $_SESSION['otp'] = $otp;
-            $message = "your code is " . $_SESSION['otp'];
-            $subject = "Email verification";
-            $recipient = $_SESSION['email'];
-            send_mail($recipient, $subject, $message);
-
-            header("Location: verify.php");
-            exit();
+      if ($stmt->rowCount() > 0) {
+        echo '<script>alert("Email already Exist");</script>';
+      } else {
+        try{
+          $_SESSION['email'] = $email;
+          $_SESSION['password'] = $confirm_password;
+          $_SESSION['firstname'] = $firstname;
+          $_SESSION['lastname'] = $lastname;
+          $_SESSION['middlename'] = $middlename;
+          $_SESSION['position'] = $position;
+          $otp = rand(100000, 999999);
+          $_SESSION['otp'] = $otp;
+          $message = "your code is " . $_SESSION['otp'];
+          $subject = "Email verification";
+          $recipient = $_SESSION['email'];
+          send_mail($recipient, $subject, $message);
+          echo '<script>alert("OTP Sent to your email");window.location.href = "verify.php";</script>';
+          exit();
         }
-    }
+        catch(PDOException $e){
+          $error_log = "Error: " . $e->getMessage();
+          echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+          exit();
+        }
+      }
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -238,7 +232,7 @@ if(isset($_POST['register'])){
                     <input type="text" class="input" id="email" name="email" required>
                  </div> 
                   
-                 <div class="inputfield"  <?php echo isset($passworderror) ? 'data-error="' . htmlspecialchars($password_error) . '"' : ''; ?>>
+                 <div class="inputfield"  <?php echo isset($password_error) ? 'data-error="' . htmlspecialchars($password_error) . '"' : ''; ?>>
                     <label>Password</label>
                     <input type="password" class="input" id="password" name="password" required>
                  </div>  
