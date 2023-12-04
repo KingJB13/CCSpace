@@ -2,6 +2,7 @@
 session_start();
 require_once '../configuration/dbcon.php';
 
+try{
     if(isset($_SESSION['ccs_id'])){
         $prof_name = $_SESSION['username'];
         $sql = "SELECT * FROM ccs_schedule WHERE prof_name = :prof_name AND time_start = '7:00' ORDER BY sched_day ASC";
@@ -30,12 +31,18 @@ require_once '../configuration/dbcon.php';
         $schedfour = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     }
-
     else
     {
         session_destroy();
         header("Location: ../index.php");
+        exit();
     }
+}
+catch(PDOException $e){
+    $error_log = "Error: " . $e->getMessage();
+    echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

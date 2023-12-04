@@ -1,75 +1,82 @@
 <?php
     session_start();
     require_once '../configuration/dbcon.php';
+try{
     if(isset($_SESSION['ccs_id'])){
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '7:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $csseven = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '7:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $csseven = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '10:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $csten = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '10:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $csten = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '13:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $csone = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '13:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $csone = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '16:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $csfour = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '16:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $csfour = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            //COM LAB
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'COM LAB' AND time_start = '7:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $comseven = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //COM LAB
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'COM LAB' AND time_start = '7:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $comseven = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'COM LAB' AND time_start = '10:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $comten = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'COM LAB' AND time_start = '10:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $comten = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'COM LAB' AND time_start = '13:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $comone = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'COM LAB' AND time_start = '13:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $comone = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'COM LAB' AND time_start = '16:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $comfour = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'COM LAB' AND time_start = '16:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $comfour = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            //ICT LAB
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'ICT LAB' AND time_start = '7:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $ictseven = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //ICT LAB
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'ICT LAB' AND time_start = '7:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $ictseven = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'ICT LAB' AND time_start = '10:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $ictten = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'ICT LAB' AND time_start = '10:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $ictten = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'ICT LAB' AND time_start = '13:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $ictone = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'ICT LAB' AND time_start = '13:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $ictone = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            
-            $sql = "SELECT * FROM ccs_schedule WHERE room = 'ICT LAB' AND time_start = '16:00' ORDER BY sched_day ASC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $ictfour = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-        else{
-            header("Location: ../index.php");
-        }
+        
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'ICT LAB' AND time_start = '16:00' ORDER BY sched_day ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $ictfour = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    else{
+        header("Location: ../index.php");
+    }
+}
+catch(PDOException $e){
+    $error_log = "Error: " . $e->getMessage();
+    echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

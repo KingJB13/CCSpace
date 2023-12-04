@@ -1,6 +1,6 @@
 <?php
 session_start();
- if(!isset($_SESSION['ccs_id'])){
+if(!isset($_SESSION['ccs_id'])){
 header('Location: ../index.php');
 }
 ?>

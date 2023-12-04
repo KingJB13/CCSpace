@@ -1,7 +1,7 @@
 <?php
     session_start();
     require_once '../configuration/dbcon.php';
-
+try{
     if(isset($_SESSION['ccs_id'])){
         $prof_name = $_SESSION['username'];
         $sql = "SELECT * FROM ccs_log WHERE prof_name = :name ORDER BY log_date DESC";
@@ -13,7 +13,15 @@
     else{
         session_destroy();
         header("Location: ../index.php");
+        exit();
     }
+}
+catch(PDOException $e){
+    $error_log = "Error: " . $e->getMessage();
+    echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+    exit();
+}
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">

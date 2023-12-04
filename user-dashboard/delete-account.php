@@ -2,40 +2,43 @@
 session_start();
 require_once '../configuration/dbcon.php';
 
-    if(isset($_SESSION['ccs_id'])){
-        if(isset($_POST['delete'])){
-            $id = $_SESSION['ccs_id'];
-            $password = $_POST['password'];
-            $sql = "SELECT ccs_password FROM ccs_user WHERE ccs_id = :id"; 
-            $stmt= $pdo->prepare($sql);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetch();
+try{
+  if(isset($_SESSION['ccs_id'])){
+    if(isset($_POST['delete'])){
+        $id = $_SESSION['ccs_id'];
+        $password = $_POST['password'];
+        $sql = "SELECT ccs_password FROM ccs_user WHERE ccs_id = :id"; 
+        $stmt= $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $result = $stmt->fetch();
 
-            if(password_verify($password, $result['ccs_password'])){
-                try{
-                    $id = $_SESSION['ccs_id'];
-                    $sql = "DELETE FROM ccs_user WHERE ccs_id = :id";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->bindParam(':id', $id);
-                    if($stmt->execute()){
-                        header("Location: ../index.php");
-                    }
+        if(strlen($password) < 8 || strlen($password) > 32){
+          if(password_verify($password, $result['ccs_password'])){
+            $id = $_SESSION['ccs_id'];
+                $sql = "DELETE FROM ccs_user WHERE ccs_id = :id";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':id', $id);
+                if($stmt->execute()){
+                  echo "<script>alert('Account Deleted Successfully!');window.location='../index.php'</script>";
                 }
-                catch (PDOException $e) {
-                    $error_message='Database error: ' . $e->getMessage();
-                    sleep(2);
-                    header('Location: dashboard.php');
+                else{
+                  echo "<script>alert('Error deleting account!')</script>";
                 }
-            } else {
-                $error_message = "Current password is incorrect";
-                sleep(2);
-                header('Reload: 0');
-            }
-            
-        }
-        
-    }
+          } else {
+              $error_message = "Current password is incorrect";
+          }
+        } else {
+          $error_message = "Password must be between 8 and 32 characters long.";
+        }  
+    }  
+  }
+}
+catch(PDOException $e){
+  $error_log = "Error: " . $e->getMessage();
+  echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+  exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,133 +49,7 @@ require_once '../configuration/dbcon.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CCSpace</title>
     <link rel="stylesheet" href="../styles/dashboardstruc.css">
-    <style>
-        .wrapper{
-        max-width: 500px;
-        width: 100%;
-        background: #fff;
-        margin: 50px auto;
-        box-shadow: 2px 2px 4px rgba(0,0,0,0.125);
-        padding: 30px;
-      }
-
-      .wrapper .title{
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 25px;
-        color: #132043;
-        text-transform: uppercase;
-        text-align: center;
-      }
-
-      .wrapper .form{
-        width: 100%;
-      }
-
-      .wrapper .form .inputfield{
-        margin-bottom: 15px;
-        display: flex;
-      }
-
-      .wrapper .form .inputfield:nth-child(7){
-          margin-bottom: 20px;
-      }
-
-      .wrapper .form .inputfield label{
-        width: 200px;
-        color: #757575;
-        margin-right: 10px;
-        font-size: 14px;
-      }
-
-      .wrapper .form .inputfield .textarea {
-        width: 100%;
-        height: 100px;
-        resize: none;
-        box-sizing: border-box;
-        outline: none;
-        border: 1px solid #d5dbd9;
-        font-size: 15px;
-        padding: 15px;
-        border-radius: 3px;
-        transition: all 0.3s ease;
-    }
-
-
-      .wrapper .form .inputfield .custom_select{
-        position: relative;
-        width: 100%;
-        height: 37px;
-      }
-
-      .wrapper .form .inputfield .custom_select:before{
-        content: "";
-        position: absolute;
-        top: 12px;
-        right: 10px;
-        border: 8px solid;
-        border-color: #d5dbd9 transparent transparent transparent;
-        pointer-events: none;
-      }
-
-      .wrapper .form .inputfield .custom_select select{
-        -webkit-appearance: none;
-        -moz-appearance:   none;
-        appearance:        none;
-        outline: none;
-        width: 100%;
-        height: 100%;
-        border: 0px;
-        padding: 8px 10px;
-        font-size: 15px;
-        border: 1px solid #d5dbd9;
-        border-radius: 3px;
-      }
-
-      .wrapper .form .inputfield .textarea:focus,
-      .wrapper .form .inputfield .custom_select select:focus{
-        border: 1px solid #132043;
-      }
-
-      .wrapper .form .inputfield p{
-        font-size: 14px;
-        color: #757575;
-      }
-
-
-
-      .wrapper .form .inputfield .btn{
-        width: 100%;
-        padding: 8px 10px;
-        font-size: 15px; 
-        border: 0px;
-        background:  #132043;
-        color: #fff;
-        cursor: pointer;
-        border-radius: 3px;
-        outline: none;
-      }
-
-      .wrapper .form .inputfield .btn:hover{
-        background: #132043;
-      }
-
-      .wrapper .form .inputfield:last-child{
-        margin-bottom: 0;
-      }
-
-      @media (max-width:420px) {
-        .wrapper .form .inputfield{
-          flex-direction: column;
-          align-items: flex-start;
-        }
-        .wrapper .form .inputfield label{
-          margin-bottom: 5px;
-        }
-
-      }
-
-    </style>
+    <link rel="stylesheet" href="../styles/input.css">
 </head>
 
 <body>
@@ -187,12 +64,8 @@ require_once '../configuration/dbcon.php';
             <div class="title">
                 ENTER PASSWORD TO DELETE ACCOUNT
             </div>
-            <?php if(isset($error_message)):?>
-                <div id="error" style="color:red"><p><?php echo $error_message?></p></div>
-            <?php endif;?>
-            
             <form action="delete-account.php" method="POST" class="form">
-              <div class="inputfield">
+              <div class="inputfield" <?php echo isset($error_message) ? 'data-error="' . htmlspecialchars($error_message) . '"' : ''; ?>>
                         <label>Password</label>
                         <input type="password" class="input" name="password">
               </div>

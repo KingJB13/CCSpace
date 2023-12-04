@@ -14,14 +14,11 @@
             session_destroy();
             header('Location: ../index.php');
         }
-    } catch (PDOException $e) {
-        session_destroy();
-        die('Database error: ' . $e->getMessage());
-        header('Location: ../index.php');
+    } catch(PDOException $e){
+        $error_log = "Error: " . $e->getMessage();
+        echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+        exit();
     }
-
-    
-
 ?> 
 
 <!DOCTYPE html>
