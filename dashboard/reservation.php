@@ -2,6 +2,7 @@
     session_start();
     require_once '../configuration/dbcon.php';
 
+try{
     if(isset($_SESSION['ccs_id']) && $_SESSION['position'] == 'Admin'){
         $sql = "SELECT * FROM ccs_reservation ORDER BY sched_date DESC";
         $stmt = $pdo->prepare($sql);
@@ -30,6 +31,12 @@
         $stmt->bindParam(':id', $res_id);
         $stmt->execute();
     }
+}
+catch(PDOException $e){
+    $error_log = "Error: " . $e->getMessage();
+    echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+    exit();
+}
 
 ?>
 <!DOCTYPE html>

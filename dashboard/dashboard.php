@@ -31,21 +31,23 @@
                 $sql = "DELETE FROM ccs_user WHERE ccs_id = :id";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(":id",$id);
-                $stmt->execute();
-                header("Refresh: 0");
+                if($stmt->execute()){
+                    echo "<script>alert('User Deleted Successfully!');</script.";
+                } else {
+                    echo "<script>alert('Error in deleting the record');</script>";
+                }
             }
 
         } else {
             header('Location: ../user-dashboard/dashboard.php');
+            exit();
         }
-    } catch (PDOException $e) {
-        session_destroy();
-        die('Database error: ' . $e->getMessage());
-        header('Location: ./index.php');
+    } 
+    catch(PDOException $e){
+        $error_log = "Error: " . $e->getMessage();
+        echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+        exit();
     }
-    
-    
-
 ?> 
 
 <!DOCTYPE html>

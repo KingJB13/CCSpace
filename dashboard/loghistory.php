@@ -2,6 +2,7 @@
     session_start();
     require_once '../configuration/dbcon.php';
 
+try{
     if(isset($_SESSION['ccs_id']) && $_SESSION['position'] == 'Admin'){
         $prof_name = $_SESSION['username'];
         $sql = "SELECT * FROM ccs_log ORDER BY log_date DESC";
@@ -11,7 +12,14 @@
     }
     else{
         header("Location: ../user-dashboard/proflog.php");
+        exit();
     }
+}
+catch(PDOException $e){
+    $error_log = "Error: " . $e->getMessage();
+    echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
