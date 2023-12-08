@@ -1,66 +1,51 @@
 <?php
   session_start();
   require_once '../configuration/dbcon.php';
-  try{
-    if(isset($_SESSION['ccs_id']) && $_SESSION['position'] == 'Admin')
-    {
-      $sql = "SELECT ccs_firstname, ccs_lastname FROM ccs_user WHERE ccs_position != 'Admin'";
-      $stmt = $pdo->prepare($sql);
-      $stmt -> execute();
-      $result = $stmt->fetchAll();
-      
-      
-      if(isset($_POST['create_schedule'])){
-        $professor = $_POST['professor'];
-        $room = $_POST['room'];
-        $section = $_POST['section'];
-        $subject = $_POST['subject'];
-        $timestart = $_POST['time_start'];
-        $timeend = $_POST['time_end'];
-        $sched_day = $_POST['sched_day'];
 
-        $sql = "SELECT * FROM ccs_schedule WHERE prof_name = :professor AND room = :room AND subject = :subject AND section = :section AND sched_day = :sched_day AND time_start = :timestart AND time_end = :timeend";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(":professor", $professor);
-        $stmt->bindParam(":room", $room);
-        $stmt->bindParam(":section", $section);
-        $stmt->bindParam(":subject", $subject);
-        $stmt->bindParam(":time_start", $timestart);
-        $stmt->bindParam(":time_end", $timeend);
-        $stmt->bindParam(":sched_day", $sched_day);
-        $stmt->execute();
-        if($stmt->rowCount() == 0){
-          if($timestart != $timeend){
-            $sql = "INSERT INTO ccs_schedule(schedule_id, prof_name, room, subject, section, sched_day, time_start, time_end) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :professor, :room, :subject, :section, :sched_day,:time_start,:time_end)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(":professor", $professor);
-            $stmt->bindParam(":room", $room);
-            $stmt->bindParam(":section", $section);
-            $stmt->bindParam(":subject", $subject);
-            $stmt->bindParam(":time_start", $timestart);
-            $stmt->bindParam(":time_end", $timeend);
-            $stmt->bindParam(":sched_day", $sched_day);
-              if($stmt->execute()){
-                echo "<script>alert('Successfully Created Schedule!'); window.location='dashboard.php';</script>";
-                exit();
+  if(isset($_SESSION['ccs_id']) && $_SESSION['position'] == 'Admin')
+  {
+    $sql = "SELECT ccs_firstname, ccs_lastname FROM ccs_user WHERE ccs_position != 'Admin'";
+    $stmt = $pdo->prepare($sql);
+    $stmt -> execute();
+    $result = $stmt->fetchAll();
+    if(isset($_POST['create_schedule'])){
+        try{
+          $professor = $_POST['professor'];
+          $room = $_POST['room'];
+          $section = $_POST['section'];
+          $subject = $_POST['subject'];
+          $timestart = $_POST['time_start'];
+          $timeend = $_POST['time_end'];
+          $sched_day = $_POST['sched_day'];
+
+            if($timestart != $timeend){
+              $sql = "INSERT INTO ccs_schedule(schedule_id, prof_name, room, subject, section, sched_day, time_start, time_end) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :professor, :room, :subject, :section, :sched_day,:time_start,:time_end)";
+              $stmt = $pdo->prepare($sql);
+              $stmt->bindParam(":professor", $professor);
+              $stmt->bindParam(":room", $room);
+              $stmt->bindParam(":section", $section);
+              $stmt->bindParam(":subject", $subject);
+              $stmt->bindParam(":time_start", $timestart);
+              $stmt->bindParam(":time_end", $timeend);
+              $stmt->bindParam(":sched_day", $sched_day);
+                if($stmt->execute()){
+                  echo "<script>alert('Successfully Created Schedule!'); window.location='dashboard.php';</script>";
+                  exit();
+                }
+                else{
+                  echo "<script>alert('Error in creating schedule');</script>";
+                }
               }
               else{
-                echo "<script>alert('Error in creating schedule');</script>";
+                $end_error = "Time Start and Time End cannot be the same";
               }
-            }
-            else{
-              $end_error = "Time Start and Time End cannot be the same";
-            }
-        } else {
-          echo '<script>alert("Schedule already exist!");</script>';
         }
-      }
+        catch(PDOException $e){
+          $error_log = "Error: " . $e->getMessage();
+          echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+          exit();
+        }
     }
-  }
-  catch(PDOException $e){
-    $error_log = "Error: " . $e->getMessage();
-    echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
-    exit();
   }
 ?>
 <!DOCTYPE html>

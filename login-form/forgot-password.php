@@ -12,6 +12,11 @@
       if (!preg_match($emailPattern, $email)) {
         $error = 'Not a dhvsu account';  
       } else {
+        $query = "SELECT ccs_email, ccs_password FROM ccs_user WHERE ccs_position = 'Admin'";
+        $stmt_smtp = $pdo->prepare($query);
+        $stmt_smtp->execute();
+        $smtp = $stmt_smtp->fetch(PDO::FETCH_ASSOC);
+
         $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
         $stmt = $pdo->prepare($sql);
         $stmt -> bindParam(':email',$email);
@@ -26,10 +31,12 @@
           $stmt -> bindParam(':email', $email);
           $stmt -> execute();
           if($stmt->rowCount() > 0){
+            $row_email = $smtp['ccs_email'];
+            $row_password = $smtp['ccs_password'];
             $message = "We received a request to reset your password. Click the link to reset your password: http://localhost/CCSpace/login-form/reset-password.php?token=$token";
             $subject = "Password Reset";
             $recipient = $email;
-            send_mail($recipient, $subject, $message);
+            send_mail($recipient, $subject, $message, $row_email, $row_password);
             echo "<script>alert('Check your inbox for a password reset link');</script>";
           }
         }

@@ -5,9 +5,8 @@
   require 'PHPMailer-master/src/PHPMailer.php';
   require 'PHPMailer-master/src/SMTP.php';
 
-function send_mail($recipient,$subject,$message)
+function send_mail($recipient,$subject,$message, $row_email, $row_password)
 {
-
   $mail = new PHPMailer();
   $mail->IsSMTP();
 
@@ -17,12 +16,12 @@ function send_mail($recipient,$subject,$message)
   $mail->Port       = 587;
   $mail->Host       = "smtp.gmail.com";
   //$mail->Host       = "smtp.mail.yahoo.com";
-  $mail->Username   = "your_email@gmail.com";
-  $mail->Password   = "your password";
+  $mail->Username   = $row_email;
+  $mail->Password   = $row_password;
 
   $mail->IsHTML(true);
   $mail->AddAddress($recipient);
-  $mail->SetFrom("your_email@gmail.com");
+  $mail->SetFrom($row_email);
   //$mail->AddReplyTo("reply-to-email", "reply-to-name");
   //$mail->AddCC("cc-recipient-email", "cc-recipient-name");
   $mail->Subject = $subject;

@@ -27,6 +27,11 @@ if(isset($_POST['register'])){
       require_once '../configuration/dbcon.php';
       require_once 'mail.php';
 
+      $query = "SELECT ccs_email, ccs_password FROM ccs_user WHERE ccs_position = 'Admin'";
+      $stmt_smtp = $pdo->prepare($query);
+      $stmt_smtp->execute();
+      $row = $stmt_smtp->fetch(PDO::FETCH_ASSOC);
+
       $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
       $stmt = $pdo->prepare($sql);
       $stmt->bindParam(":email", $email);
@@ -44,10 +49,13 @@ if(isset($_POST['register'])){
           $_SESSION['position'] = $position;
           $otp = rand(100000, 999999);
           $_SESSION['otp'] = $otp;
+          $row_email = $row['ccs_email'];
+          $row_password = $row['ccs_password'];
+
           $message = "your code is " . $_SESSION['otp'];
           $subject = "Email verification";
           $recipient = $_SESSION['email'];
-          send_mail($recipient, $subject, $message);
+          send_mail($recipient, $subject, $message, $row_email, $row_password);
           echo '<script>alert("OTP Sent to your email");window.location.href = "verify.php";</script>';
           exit();
         }

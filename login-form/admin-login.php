@@ -2,16 +2,12 @@
   session_start();
   require_once '../configuration/dbcon.php';
 
-  if(isset($_POST['login'])){
+  if(isset($_POST['admin-login'])){
       try{
         $email = $_POST['email'];
         $enteredPassword = $_POST['password'];
-        $emailPattern = '/^[a-zA-Z0-9._%+-]+@dhvsu\.edu\.ph$/';
-        $adminemail = '/^[a-zA-Z0-9._%+-]+@gmail\.com$/';
 
-        if (!preg_match($emailPattern, $email)) {
-          $error = 'Not a dhvsu account';
-        } elseif (strlen($enteredPassword) < 8 || strlen($enteredPassword) > 32) {
+        if (strlen($enteredPassword) < 8 || strlen($enteredPassword) > 32) {
           $password_error = 'Password must be 8 - 32 characters long';
         } else {
           $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
@@ -21,14 +17,13 @@
               $user = $stmt->fetch();
   
               if ($user) {
-                  $hashedPassword = $user['ccs_password'];
-                  if (password_verify($enteredPassword, $hashedPassword)) {
+                  $ccs_password = $user['ccs_password'];
+                  if ($enteredPassword === $ccs_password) {
                       $_SESSION['ccs_id'] = $user['ccs_id'];
-                      $_SESSION['username'] = $user['ccs_firstname']." ".$user['ccs_lastname'];
                       $_SESSION['position'] = $user['ccs_position'];
                       
-                      if($_SESSION['position'] != 'Admin'){
-                        header("Location: ../main/home.php");
+                      if($_SESSION['position'] == 'Admin'){
+                        header("Location: ../dashboard/dashboard.php");
                         exit();
                       }
                   } else {
@@ -41,8 +36,8 @@
           }
           else{
               $error_message = "Error: " . $sql . "<br>" . $pdo->error;
-              session_destroy();
               echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+              exit();
 
           }
         }
@@ -50,7 +45,6 @@
       }
       catch(PDOException $e){
         $error_log = "Error: " . $e->getMessage();
-        session_destroy();
         echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
         exit();
       }
@@ -78,7 +72,7 @@
              Login
             </div>
             
-            <form action="login.php" method="POST" class="form">
+            <form action="admin-login.php" method="POST" class="form">
                 <div class="inputfield" <?php echo isset($error) ? 'data-error="' . htmlspecialchars($error) . '"' : ''; ?>>
                     <label>Email Address</label>
                     <input type="text" class="input" id="email" name="email" required>
@@ -90,7 +84,7 @@
                  </div>  
                
               <div class="inputfield">
-                <input type="submit" value="login" id="btn" class="btn" name="login">
+                <input type="submit" value="login" id="btn" class="btn" name="admin-login">
               </div>
               <div class="inputfield">
                 <p>Not a member?</p><a href="./signup.php">Register</a>

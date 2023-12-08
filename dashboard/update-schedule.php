@@ -72,7 +72,7 @@ catch(PDOException $e){
         
         <div class="wrapper">
             <div class="title">
-              Reservation Form
+              Update Schedule
             </div>
             <form class="form" method="POST" action="update-schedule.php">
                   <div class="inputfield">
