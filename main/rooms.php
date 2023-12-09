@@ -29,7 +29,8 @@
             width: 100%;
         }
         .title{
-            margin-bottom: 25px;
+            font-size: 30px;
+            padding-left:  50px;
             width: 100%;
         }
         .card{

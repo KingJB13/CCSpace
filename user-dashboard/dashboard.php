@@ -38,15 +38,16 @@
         padding: 30px 30px;
         font-size: 20px;
         height: 80vh;
-        width: 90%;
+        width: 100%;
     }
 
     .about h1{
+        width: 100%;
+        float: left;
         text-transform: uppercase;
         letter-spacing: 3px;
         font-size: 50px;
         font-weight: 500;
-        border-bottom: 1px solid #e0e0e0 ;
     }
 
     .about ul li{
@@ -57,7 +58,7 @@
         margin-top: 50px;
 
     }
-    .about ul li a{
+    .about a{
         text-decoration: none;
         background: #1F4172;
         padding: 7px 13px;
@@ -79,7 +80,10 @@
         
         <div class="about">
             <ul>
-                <h1>About</h1>
+                <div class="left">
+                    <h1>About</h1>
+                </div>
+
             </ul>
             <ul>
                 <h3>User ID</h3>
@@ -102,9 +106,8 @@
                 <li><?php echo isset($results['ccs_position']) ? $results['ccs_position'] : 'N/A'; ?></li>
             </ul>
             <ul>
-                <li><a href="update-password.php">Update Password</a></li>
-                <br>
-                <li><a href="delete-account.php">Delete Account</a></li>
+                <a href="update-password.php">Update Password</a>
+                <a href="delete-account.php">Delete Account</a>
             </ul>
         </div>
     </div>
