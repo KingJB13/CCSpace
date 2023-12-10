@@ -1,36 +1,28 @@
 <?php
-        if (session_status() == PHP_SESSION_NONE) {
+    if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
     require_once '../configuration/dbcon.php';
-    
     try{
-        $schedule_id = $_GET['schedule_id'];
-        $room_name = $_GET['room_name'];
-        $subject = $_SESSION['subject'];
-        $section = $_SESSION['section'];
-        $profname = $_SESSION['username']; 
-        
         if(isset($_POST['text'])){
+            $log_id = $_GET['log_id'];
+            $room_name = $_GET['room_name'];
             $text = $_POST['text'];
             if($schedule_id){
                 if(password_verify($room_name, $text)){
-                    $sql = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section ,log_date, time_start, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),NOW(),"Ongoing")';
+                    $sql = 'UPDATE ccs_log SET time_end = NOW(), remarks = "Present" WHERE log_id = :log_id';
                     $stmt = $pdo->prepare($sql);
-                    $stmt->bindParam(':prof_name', $profname);
-                    $stmt->bindParam(':room_name', $room_name);
-                    $stmt->bindParam(':subject', $subject);
-                    $stmt->bindParam(':section', $section);
+                    $stmt->bindParam(':log_id', $log_id);
                     if($stmt->execute()){
                         $result = $stmt->fetch();
-                        echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id'].'</script>';
+                        echo '<script>alert("Time Out Success");window.location.href="rooms.php"</script>';
                         exit();
                     } else{
-                        echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-in.php?schedule_id='.$schedule_id.'&room_name='.$room_name.'"</script>';
+                        echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-out.php?log_id='.$log_id.'&room_name='.$room_name.'"</script>';
                         exit();
                     }
                 } else {
-                    echo '<script>alert("QR Code does not match");window.location.href="time-in.php?schedule_id='.$schedule_id.'&room_name='.$room_name.'"</script>';
+                    echo '<script>alert("QR Code does not match");window.location.href="time-out.php?log_id='.$log_id.'&room_name='.$room_name.'"</script>';
                     exit();
                 }
             }
@@ -64,6 +56,7 @@
                 exit();
             }
         }
+    
     } catch(PDOException $e){
         $error_log = "Error: " . $e->getMessage();
         echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
@@ -125,72 +118,24 @@
         #file {
             padding-left: 20px;
         }
-        #form{
-            display: none;
-            width: 100%;
-        }
-        #form .input-field{
-            padding-left: 50px;
-            padding-right: 50px;
-            margin: 15px;
-            display: block;
-            align-items: center;
-        }
-        #form .input-field .input{
-            width: 100%;
-            outline: none;
-            border: 1px solid #d5dbd9;
-            font-size: 15px;
-            padding: 5px 8px;
-            border-radius: 3px;
-            transition: all 0.3s ease;
-            text-transform:none;
-        }
-        #form .input-field .input:focus{
-            border: 1px solid #132043;
-        }
-        #form .input-field .btn{
-            margin-left: 230px;
-            width: 20%;
-            padding: 5px 8px;
-            font-size: 15px; 
-            border: 0px;
-            background:  #132043;
-            color: #fff;
-            cursor: pointer;
-            border-radius: 3px;
-            outline: none;
-        }
-        #form .input-field .btn:hover{
-            background: #fff;
-            color: #132043;
-        }
         @media(max-width: 1600px){
             .info{
-                height: 650px;
+                height: 500px;
                 width: 500px;
             }
             #preview{
                 height: 300px;
                 width: 400px;
             }
-            #form .input-field .btn{
-            width: 100%;
-            margin-left: 0;
-            }
         }
         @media(max-width: 767px){
             .info{
-                height: 600px;
+                height: 400px;
                 width: 400px;
             }
             #preview{
-                height: 250px;
+                height: 400px;
                 width: 300px;
-            }
-            #form .input-field .btn{
-            width: 100%;
-            margin-left: 0;
             }
         }
     </style>
@@ -204,28 +149,15 @@
             </div>
             <div class="content">
                 <video id="preview"></video>
-                <form action="time-in.php" method="POST">
+                <form action="time-out.php" method="POST">
                 <input type="hidden" name="text" id="text">
                 <label><h3>No Camera? Upload file instead</h3></label>
                 <input type="file" name="file" id="file" accept="image/*">
                 </form>
-
-                <form id="form" action="time-in.php" method ="POST">
-                    <div class="input-field">
-                        <input type="text" name="subject" id="subject" class="input" placeholder="Subject">
-                    </div>
-
-                    <div class="input-field">
-                        <input type="text" name="section" id="section" class="input" placeholder="Section">
-                    </div>
-                    <div class="input-field">
-                        <input type="submit" value="Submit" name="submit" class="btn">
-                    </div>
-                </form>
             </div>
         </div>
     </main>
-    <script src="../scripts/qrcode.js"></script>
+    <script src="../scripts/time-out.js"></script>
     <?php require '../navigation/main-footer.php';?>
 </body>
 </html>

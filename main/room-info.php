@@ -1,98 +1,103 @@
 <?php
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
-    require_once '../configuration/dbcon.php';
-    $log_id = $_GET['log_id'];
-    $room_name = $_GET['room_name'];
-    $professor =$_SESSION['username'];
-    $day = date('l');
-    $row = null;
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+require_once '../configuration/dbcon.php';
+    try{
+        $log_id = $_GET['log_id'];
+        $room_name = $_GET['room_name'];
+        $professor =$_SESSION['username'];
+        $day = date('l');
+        $row = null;
 
-    $sql = "SELECT * FROM ccs_reservation WHERE room = :room_name AND sched_date = DATE(NOW()) AND TIME(NOW()) >= TIME(time_start) AND TIME(NOW()) <= TIME(time_end)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':room_name', $room_name);
-    $stmt->execute();
-    $reserve = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    function getSchedule($room_name, $weekday){
-        global $pdo;
-        $sql = 'SELECT * FROM ccs_schedule WHERE room = :room AND sched_day = :weekday AND TIME(NOW()) >= TIME(time_start) AND TIME(NOW()) <= TIME(time_end)';
+        $sql = "SELECT * FROM ccs_reservation WHERE room = :room_name AND sched_date = DATE(NOW()) AND TIME(NOW()) >= TIME(time_start) AND TIME(NOW()) <= TIME(time_end)";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':room', $room_name);
-        $stmt->bindParam(':weekday', $weekday);
-        $stmt->execute();
-        if($stmt->rowCount() > 0){
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } else {
-            return null;
-        }
-
-    }
-
-    switch($day) { 
-        case 'Monday':
-            $weekday = '1';
-            $row = getSchedule($room_name, $weekday); 
-            break;
-        case 'Tuesday':
-            $weekday = '2';
-            $row = getSchedule($room_name, $weekday); 
-            break;
-        case 'Wednesday':
-            $weekday = '3';
-            $row = getSchedule($room_name, $weekday);
-            break;
-        case 'Thursday':
-                $weekday = '4';
-                $row = getSchedule($room_name, $weekday);
-                break;
-        case 'Friday':
-            $weekday = '5';
-            $row = getSchedule($room_name, $weekday);
-            break;
-        case 'Saturday':
-            $weekday = '6';
-            $row = getSchedule($room_name, $weekday);   
-            break;
-        default:
-            $message = "Sunday is rest day";
-            break;
-        }
-
-        $sql = "SELECT * FROM ccs_log WHERE log_id = :log_id AND room = :room_name";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':log_id', $log_id);
         $stmt->bindParam(':room_name', $room_name);
         $stmt->execute();
-        $logexists = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if(isset($_POST['time-in'])){
-            if(isset($message)){
-                echo '<script>alert("'.$message.'")</script>';
+        $reserve = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        function getSchedule($room_name, $weekday){
+            global $pdo;
+            $sql = 'SELECT * FROM ccs_schedule WHERE room = :room AND sched_day = :weekday AND TIME(NOW()) >= TIME(time_start) AND TIME(NOW()) <= TIME(time_end)';
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':room', $room_name);
+            $stmt->bindParam(':weekday', $weekday);
+            $stmt->execute();
+            if($stmt->rowCount() > 0){
+                return $stmt->fetch(PDO::FETCH_ASSOC);
             } else {
-                if($_SESSION['prof_name'] === $professor){
-                    header("Location: time-in.php?schedule_id=".$_SESSION['schedule_id']."");
-                    exit();
-                } elseif($_SESSION['prof_name'] !== $professor) {
-                    $subject = $_SESSION['subject'];
-                    $section = $_SESSION['section'];
-                    $sql = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section, log_date, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),"Absent")';
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->bindParam(':prof_name', $professor);
-                    $stmt->bindParam(':room_name', $room_name);
-                    $stmt->bindParam(':subject', $subject);
-                    $stmt->bindParam(':section', $section);
-                    if($stmt->execute()){
-                        header("Location: time-in.php?schedule_id=");
-                    }
-                }
+                return null;
             }
-        } elseif(isset($_POST['time-out'])){
-            header("Location: time-out.php?log_id=" . $logexists['log_id']);
-            exit();
+
         }
 
+        switch($day) { 
+            case 'Monday':
+                $weekday = '1';
+                $row = getSchedule($room_name, $weekday); 
+                break;
+            case 'Tuesday':
+                $weekday = '2';
+                $row = getSchedule($room_name, $weekday); 
+                break;
+            case 'Wednesday':
+                $weekday = '3';
+                $row = getSchedule($room_name, $weekday);
+                break;
+            case 'Thursday':
+                    $weekday = '4';
+                    $row = getSchedule($room_name, $weekday);
+                    break;
+            case 'Friday':
+                $weekday = '5';
+                $row = getSchedule($room_name, $weekday);
+                break;
+            case 'Saturday':
+                $weekday = '6';
+                $row = getSchedule($room_name, $weekday);   
+                break;
+            default:
+                $message = "Sunday is rest day";
+                break;
+            }
+
+            $sql = "SELECT * FROM ccs_log WHERE log_id = :log_id AND room = :room_name";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':log_id', $log_id);
+            $stmt->bindParam(':room_name', $room_name);
+            $stmt->execute();
+            $logexists = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if(isset($_POST['time-in'])){
+                if(isset($message)){
+                    echo '<script>alert("'.$message.'")</script>';
+                } else {
+                    if($_SESSION['prof_name'] === $professor){
+                        header("Location: time-in.php?schedule_id=".$_SESSION['schedule_id']."&room_name=".$room_name);
+                        exit();
+                    } elseif($_SESSION['prof_name'] !== $professor) {
+                        $subject = $_SESSION['subject'];
+                        $section = $_SESSION['section'];
+                        $sql = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section, log_date, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),"Absent")';
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->bindParam(':prof_name', $professor);
+                        $stmt->bindParam(':room_name', $room_name);
+                        $stmt->bindParam(':subject', $subject);
+                        $stmt->bindParam(':section', $section);
+                        if($stmt->execute()){
+                            header("Location: time-in.php?schedule_id=&room_name=".$room_name);
+                        }
+                    }
+                }
+            } elseif(isset($_POST['time-out'])){
+                header("Location: time-out.php?log_id=" . $logexists['log_id']."&room_name=".$room_name);
+                exit();
+            }
+    } catch(PDOException $e){
+        $error_log = "Error: " . $e->getMessage();
+        echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+        exit();
+    }
         
 ?>
 <!DOCTYPE html>
@@ -164,13 +169,18 @@
                     <form action="room-info.php" method="POST">
                         
                     <?php
+                    if(isset($message)){
+                        echo '<input type="submit" value="Time In" name="time-in" disabled>';
+                        echo '<input type="submit" value="Time Out" name="time-out" disabled>';
+                    } else {
                         if(isset($logexists['log_id'])){
                             echo '<input type="submit" value="Time In" name="time-in" disabled>';
                             echo '<input type="submit" value="Time Out" name="time-out">';
-                        } else {
+                        } elseif(!isset($logexists['log_id'])) {
                             echo '<input type="submit" value="Time In" name="time-in">';
                             echo '<input type="submit" value="Time Out" name="time-out" disabled>';
-                        }
+                        } 
+                    }
                     ?>
                     </form>
                 </div>
