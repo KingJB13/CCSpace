@@ -9,6 +9,6 @@
                 <li><a href="../main/schedule.php">Schedule</a></li>
                 <li><a href="../main/rooms.php">Rooms</a></li>
                 <li><a href="../main/reservation.php">Reservation</a></li>
-                <li><a href="../main/about-us.php">About Us</a></li>
+                <li><a href="../about-us/about-us.php">About Us</a></li>
             </ul>            
 </div> 
