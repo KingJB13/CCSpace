@@ -11,7 +11,8 @@
       $expiry = date("Y-m-d H:i:s", time() + 60 * 30);
       if (!preg_match($emailPattern, $email)) {
         $error = 'Not a dhvsu account';  
-      } else {
+      } 
+      if(!isset($error)) {
         $query = "SELECT ccs_email, ccs_password FROM ccs_user WHERE ccs_position = 'Admin'";
         $stmt_smtp = $pdo->prepare($query);
         $stmt_smtp->execute();
@@ -40,6 +41,9 @@
             echo "<script>alert('Check your inbox for a password reset link');</script>";
           }
         }
+      } else {
+        header("Refresh: 0");
+        exit();
       }
       
   }

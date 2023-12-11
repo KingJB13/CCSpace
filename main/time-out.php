@@ -5,17 +5,17 @@
     require_once '../configuration/dbcon.php';
     try{
         if(isset($_POST['text'])){
-            $log_id = $_GET['log_id'];
-            $room_name = $_GET['room_name'];
+            $log_id = $_SESSION['log_id'];
+            $room_name = $_SESSION['room'];
             $text = $_POST['text'];
-            if($schedule_id){
+            if($log_id){
                 if(password_verify($room_name, $text)){
                     $sql = 'UPDATE ccs_log SET time_end = NOW(), remarks = "Present" WHERE log_id = :log_id';
                     $stmt = $pdo->prepare($sql);
                     $stmt->bindParam(':log_id', $log_id);
                     if($stmt->execute()){
                         $result = $stmt->fetch();
-                        echo '<script>alert("Time Out Success");window.location.href="rooms.php"</script>';
+                        echo '<script>alert("Time Out Success");window.location.href="room-info.php?room_name='.$room_name.'&log_id='.$log_id.'"</script>';
                         exit();
                     } else{
                         echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-out.php?log_id='.$log_id.'&room_name='.$room_name.'"</script>';
@@ -24,32 +24,6 @@
                 } else {
                     echo '<script>alert("QR Code does not match");window.location.href="time-out.php?log_id='.$log_id.'&room_name='.$room_name.'"</script>';
                     exit();
-                }
-            }
-            elseif($schedule_id === " "){
-                if(isset($_POST['submit'])){
-                    $sub = $_POST['subject'];
-                    $sec = $_POST['section'];
-
-                    if(password_verify($room_name, $text)){
-                        $sql = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section ,log_date, time_start, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),NOW(),"Ongoing")';
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->bindParam(':prof_name', $profname);
-                        $stmt->bindParam(':room_name', $room_name);
-                        $stmt->bindParam(':subject', $sub);
-                        $stmt->bindParam(':section', $sec);
-                        if($stmt->execute()){
-                            $result = $stmt->fetch();
-                            echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id'].'</script>';
-                            exit();
-                        } else{
-                            echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-in.php?schedule_id='.$schedule_id.'&room_name='.$room_name.'"</script>';
-                            exit();
-                        }
-                    } else {
-                        echo '<script>alert("QR Code does not match");window.location.href="time-in.php?schedule_id='.$schedule_id.'&room_name='.$room_name.'"</script>';
-                        exit();
-                    }
                 }
             } else {
                 header("Location: rooms.php");
@@ -115,8 +89,27 @@
             height: 350px;
             width: 500px;
         }
+        form{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         #file {
             padding-left: 20px;
+        }
+        .text{
+            width: 50%;
+            margin-top: 20px;
+        }
+        .submit{
+            width: 10%;
+            margin-top: 20px;
+            background-color: #1F4172;
+            color: #fff;
+            border: none;
+            padding: 7px 10px;
+            border-radius: 4px;
         }
         @media(max-width: 1600px){
             .info{
@@ -150,14 +143,15 @@
             <div class="content">
                 <video id="preview"></video>
                 <form action="time-out.php" method="POST">
-                <input type="hidden" name="text" id="text">
                 <label><h3>No Camera? Upload file instead</h3></label>
                 <input type="file" name="file" id="file" accept="image/*">
+                <input type="text" name="text" id="text" readonly class="text">
+                <input type="submit" value="submit" name="timeout" class="submit">
                 </form>
             </div>
         </div>
     </main>
-    <script src="../scripts/time-out.js"></script>
+    <script src="../scripts/time-in.js"></script>
     <?php require '../navigation/main-footer.php';?>
 </body>
 </html>

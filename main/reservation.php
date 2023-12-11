@@ -16,11 +16,11 @@
         
         $pattern = '/^[A-Za-z]+(?: [A-Za-z]+)*$/';
         $dateTime = new DateTime($rawDate);
-        $sched_date = $dateTime->format("Y/m/d");
+        $sched_date = $dateTime->format("Y-m-d");
     
         if($timestart != $timeend){
-          if($sched_date >= date()){
-            if(pregmatch($pattern, $purpose)){
+          if($sched_date > date("Y-m-d")){
+            if(preg_match($pattern, $purpose)){
               $sql = "INSERT INTO ccs_reservation (reservation_id, prof_name, room, subject, section, sched_date, time_start, time_end, purpose, reserve_status) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :professor, :room, :subject, :section, :sched_date, :time_start, :time_end, :purpose, 'Pending')";
               $stmt = $pdo->prepare($sql);
               $stmt->bindParam(":professor", $professor);

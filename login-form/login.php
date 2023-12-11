@@ -1,7 +1,7 @@
 <?php
   session_start();
   require_once '../configuration/dbcon.php';
-
+  $errors = 0;
   if(isset($_POST['login'])){
       try{
         $email = $_POST['email'];
@@ -11,9 +11,12 @@
 
         if (!preg_match($emailPattern, $email)) {
           $error = 'Not a dhvsu account';
-        } elseif (strlen($enteredPassword) < 8 || strlen($enteredPassword) > 32) {
+          $errors++;
+        } if (strlen($enteredPassword) < 8 || strlen($enteredPassword) > 32) {
           $password_error = 'Password must be 8 - 32 characters long';
-        } else {
+          $errors++;
+        } 
+        if($errors <=0) {
           $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
           $stmt = $pdo->prepare($sql);
           $stmt->bindParam(':email', $email);
@@ -45,6 +48,10 @@
               echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
 
           }
+        } else {
+          $errors = 0;
+          header("Refresh: 0");
+          exit();
         }
 
       }

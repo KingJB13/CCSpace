@@ -4,7 +4,6 @@
 
 try{
     if(isset($_SESSION['ccs_id']) && $_SESSION['position'] == 'Admin'){
-        $prof_name = $_SESSION['username'];
         $sql = "SELECT * FROM ccs_log ORDER BY log_date DESC";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();

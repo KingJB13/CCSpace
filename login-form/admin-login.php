@@ -9,7 +9,7 @@
 
         if (strlen($enteredPassword) < 8 || strlen($enteredPassword) > 32) {
           $password_error = 'Password must be 8 - 32 characters long';
-        } else {
+        } if(!isset($password_error)) {
           $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
           $stmt = $pdo->prepare($sql);
           $stmt->bindParam(':email', $email);
@@ -40,6 +40,9 @@
               exit();
 
           }
+        } else {
+          header("Refresh: 0");
+          exit();
         }
 
       }
@@ -73,7 +76,7 @@
             </div>
             
             <form action="admin-login.php" method="POST" class="form">
-                <div class="inputfield" <?php echo isset($error) ? 'data-error="' . htmlspecialchars($error) . '"' : ''; ?>>
+                <div class="inputfield">
                     <label>Email Address</label>
                     <input type="text" class="input" id="email" name="email" required>
                  </div> 

@@ -5,15 +5,14 @@
     require_once '../configuration/dbcon.php';
     
     try{
-        $schedule_id = $_GET['schedule_id'];
-        $room_name = $_GET['room_name'];
+        $schedule_id = $_SESSION['schedule_id'];
+        $room_name = $_SESSION['room'];
         $subject = $_SESSION['subject'];
         $section = $_SESSION['section'];
         $profname = $_SESSION['username']; 
-        
         if(isset($_POST['text'])){
             $text = $_POST['text'];
-            if($schedule_id){
+            if(isset($schedule_id)){
                 if(password_verify($room_name, $text)){
                     $sql = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section ,log_date, time_start, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),NOW(),"Ongoing")';
                     $stmt = $pdo->prepare($sql);
@@ -23,7 +22,7 @@
                     $stmt->bindParam(':section', $section);
                     if($stmt->execute()){
                         $result = $stmt->fetch();
-                        echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id'].'</script>';
+                        echo '<script>alert("Time In Success");window.location.href="room-info.php?room_name='.$room_name.'&log_id='.$log_id.'"</script>';
                         exit();
                     } else{
                         echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-in.php?schedule_id='.$schedule_id.'&room_name='.$room_name.'"</script>';
@@ -34,31 +33,32 @@
                     exit();
                 }
             }
-            elseif($schedule_id === " "){
-                if(isset($_POST['submit'])){
-                    $sub = $_POST['subject'];
-                    $sec = $_POST['section'];
-
+            elseif(!isset($schedule_id)){
                     if(password_verify($room_name, $text)){
-                        $sql = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section ,log_date, time_start, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),NOW(),"Ongoing")';
+                        $sql = 'INSERT INTO ccs_log(log_id, prof_name, room,log_date, time_start, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, NOW(),NOW(),"Ongoing")';
                         $stmt = $pdo->prepare($sql);
                         $stmt->bindParam(':prof_name', $profname);
                         $stmt->bindParam(':room_name', $room_name);
-                        $stmt->bindParam(':subject', $sub);
-                        $stmt->bindParam(':section', $sec);
                         if($stmt->execute()){
                             $result = $stmt->fetch();
-                            echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id'].'</script>';
+                            $professor = $_SESSION['prof_name'];
+                                $query = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section, log_date,time_start,time_end, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),NOW(),NOW(),"Absent")';
+                                $stmt2 = $pdo->prepare($query);
+                                $stmt2->bindParam(':prof_name', $professor);
+                                $stmt2->bindParam(':room_name', $room_name);
+                                $stmt2->bindParam(':subject', $subject);
+                                $stmt2->bindParam(':section', $section);
+                                $stmt2->execute();
+                            echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id']."&room_name=".$result['room'].'</script>';
                             exit();
                         } else{
-                            echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-in.php?schedule_id='.$schedule_id.'&room_name='.$room_name.'"</script>';
+                            echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-in.php?schedule_id="'.$schedule_id.'</script>';
                             exit();
                         }
                     } else {
-                        echo '<script>alert("QR Code does not match");window.location.href="time-in.php?schedule_id='.$schedule_id.'&room_name='.$room_name.'"</script>';
+                        echo '<script>alert("QR Code does not match");window.location.href="time-in.php?schedule_id="'.$schedule_id.'</script>';
                         exit();
                     }
-                }
             } else {
                 header("Location: rooms.php");
                 exit();
@@ -70,9 +70,6 @@
         exit();
     }
 ?>
-
-    
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,48 +119,27 @@
             height: 350px;
             width: 500px;
         }
+        form{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         #file {
             padding-left: 20px;
         }
-        #form{
-            display: none;
-            width: 100%;
+        .text{
+            width: 50%;
+            margin-top: 20px;
         }
-        #form .input-field{
-            padding-left: 50px;
-            padding-right: 50px;
-            margin: 15px;
-            display: block;
-            align-items: center;
-        }
-        #form .input-field .input{
-            width: 100%;
-            outline: none;
-            border: 1px solid #d5dbd9;
-            font-size: 15px;
-            padding: 5px 8px;
-            border-radius: 3px;
-            transition: all 0.3s ease;
-            text-transform:none;
-        }
-        #form .input-field .input:focus{
-            border: 1px solid #132043;
-        }
-        #form .input-field .btn{
-            margin-left: 230px;
-            width: 20%;
-            padding: 5px 8px;
-            font-size: 15px; 
-            border: 0px;
-            background:  #132043;
+        .submit{
+            width: 10%;
+            margin-top: 20px;
+            background-color: #1F4172;
             color: #fff;
-            cursor: pointer;
-            border-radius: 3px;
-            outline: none;
-        }
-        #form .input-field .btn:hover{
-            background: #fff;
-            color: #132043;
+            border: none;
+            padding: 7px 10px;
+            border-radius: 4px;
         }
         @media(max-width: 1600px){
             .info{
@@ -174,10 +150,6 @@
                 height: 300px;
                 width: 400px;
             }
-            #form .input-field .btn{
-            width: 100%;
-            margin-left: 0;
-            }
         }
         @media(max-width: 767px){
             .info{
@@ -187,10 +159,6 @@
             #preview{
                 height: 250px;
                 width: 300px;
-            }
-            #form .input-field .btn{
-            width: 100%;
-            margin-left: 0;
             }
         }
     </style>
@@ -205,27 +173,15 @@
             <div class="content">
                 <video id="preview"></video>
                 <form action="time-in.php" method="POST">
-                <input type="hidden" name="text" id="text">
                 <label><h3>No Camera? Upload file instead</h3></label>
                 <input type="file" name="file" id="file" accept="image/*">
-                </form>
-
-                <form id="form" action="time-in.php" method ="POST">
-                    <div class="input-field">
-                        <input type="text" name="subject" id="subject" class="input" placeholder="Subject">
-                    </div>
-
-                    <div class="input-field">
-                        <input type="text" name="section" id="section" class="input" placeholder="Section">
-                    </div>
-                    <div class="input-field">
-                        <input type="submit" value="Submit" name="submit" class="btn">
-                    </div>
+                <input type="text" name="text" id="text" readonly class="text">
+                <input type="submit" value="submit" name="timein" class="submit">
                 </form>
             </div>
         </div>
     </main>
-    <script src="../scripts/qrcode.js"></script>
+    <script src="../scripts/time-in.js"></script>
     <?php require '../navigation/main-footer.php';?>
 </body>
 </html>

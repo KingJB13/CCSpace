@@ -67,30 +67,22 @@ require_once '../configuration/dbcon.php';
             $stmt->bindParam(':room_name', $room_name);
             $stmt->execute();
             $logexists = $stmt->fetch(PDO::FETCH_ASSOC);
-
+            
             if(isset($_POST['time-in'])){
                 if(isset($message)){
                     echo '<script>alert("'.$message.'")</script>';
                 } else {
                     if($_SESSION['prof_name'] === $professor){
-                        header("Location: time-in.php?schedule_id=".$_SESSION['schedule_id']."&room_name=".$room_name);
+                        header("Location: time-in.php?schedule_id=".$_SESSION['schedule_id']."");
                         exit();
                     } elseif($_SESSION['prof_name'] !== $professor) {
-                        $subject = $_SESSION['subject'];
-                        $section = $_SESSION['section'];
-                        $sql = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section, log_date, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),"Absent")';
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->bindParam(':prof_name', $professor);
-                        $stmt->bindParam(':room_name', $room_name);
-                        $stmt->bindParam(':subject', $subject);
-                        $stmt->bindParam(':section', $section);
-                        if($stmt->execute()){
-                            header("Location: time-in.php?schedule_id=&room_name=".$room_name);
-                        }
+                        $_SESSION['schedule_id'] = null;
+                        header("Location: time-in.php?schedule_id=");
+                        exit();
                     }
                 }
             } elseif(isset($_POST['time-out'])){
-                header("Location: time-out.php?log_id=" . $logexists['log_id']."&room_name=".$room_name);
+                header("Location: time-out.php?log_id=".$_SESSION['log_id']."");
                 exit();
             }
     } catch(PDOException $e){
@@ -142,8 +134,12 @@ require_once '../configuration/dbcon.php';
         }
         .content{
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
+        }
+        .content h3{
+            margin-bottom:10px;
         }
         @media(max-width: 1600px){
             .info{
@@ -174,6 +170,8 @@ require_once '../configuration/dbcon.php';
                         echo '<input type="submit" value="Time Out" name="time-out" disabled>';
                     } else {
                         if(isset($logexists['log_id'])){
+                            $_SESSION['log_id'] = $logexists['log_id'];
+                            $_SESSION['room'] = $row['room'];
                             echo '<input type="submit" value="Time In" name="time-in" disabled>';
                             echo '<input type="submit" value="Time Out" name="time-out">';
                         } elseif(!isset($logexists['log_id'])) {
@@ -190,8 +188,9 @@ require_once '../configuration/dbcon.php';
                 if($reserve !== null && isset($reserve['reservation_id']) && $reserve['reserve_status'] == 'Accepted'){
                         $_SESSION['schedule_id'] = $reserve['reservation_id'];
                         $_SESSION['prof_name'] = $reserve['prof_name'];
-                        $_SESSION['room'] = $reserve['subject'];
+                        $_SESSION['subject'] = $reserve['subject'];
                         $_SESSION['section'] = $reserve['section'];
+                        $_SESSION['room'] = $reserve['room'];
                         echo '<h3>Schedule ID: '. $reserve['reservation_id'] .'</h3>';
                         echo '<h3>Professor: '. $reserve['prof_name'] .'</h3>';
                         echo '<h3>Subject: '. $reserve['subject'] .'</h3>';
@@ -215,8 +214,9 @@ require_once '../configuration/dbcon.php';
                         if($row !== null && isset($row['schedule_id'])){
                             $_SESSION['schedule_id'] = $row['schedule_id'];
                             $_SESSION['prof_name'] = $row['prof_name'];
-                            $_SESSION['room'] = $row['subject'];
+                            $_SESSION['subject'] = $row['subject'];
                             $_SESSION['section'] = $row['section']; 
+                            $_SESSION['room'] = $row['room'];
                             echo '<h3>Schedule ID: '. $row['schedule_id'] .'</h3>';
                             echo '<h3>Professor: '. $row['prof_name'] .'</h3>';
                             echo '<h3>Subject: '. $row['subject'] .'</h3>';
@@ -233,7 +233,19 @@ require_once '../configuration/dbcon.php';
                             echo (!$log_id) ? '<h3>Status: Vacant</h3>' : '<h3>Status: Occupied</h3>';
                             
                         } else {
-                            echo '<h3>Status: Vacant</h3>';
+                            if(!isset($log_id)){
+                                if(isset($logexists)){
+                                    echo '<h3>Professor Name: '. $logexists['prof_name'] .'</h3>';
+                                    echo '<h3>Room: '. $logexists['room'] .'</h3>';
+                                    echo '<h3>Subject: '. $row['subject'] .'</h3>';
+                                    echo '<h3>Section: '. $log_exists['section'] .'</h3>';
+                                    echo '<h3>Time Start: '. $logexists['time_start'] .'</h3>';
+                                    echo '<h3>Time End: '. $log_exists['time_end'] .'</h3>';
+                                    echo '<h3>Status: Occupied</h3>';
+                                }
+                            } else {
+                                echo '<h3>Status: Vacant</h3>';
+                            }
                         }
                     }
                 }
