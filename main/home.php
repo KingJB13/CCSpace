@@ -238,6 +238,9 @@ header('Location: ../index.php');
         .container .fourth-container .slide .content .border .content{
             flex: 1 1 350px;
         } 
+        .container .fourth-container .slide .content .border .content h2{
+            text-align: justify;
+        }
         .container .fourth-container .slide .content .border .content a{
             text-decoration: none;
             background-color: #0082e6;
