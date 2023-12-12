@@ -125,7 +125,7 @@
                     <h2>Socials</h2>
                     <div class="socials">
                         <a href="https://www.facebook.com/dhvsu.ccssc"><i class="fa fa-facebook"></i></a>
-                        <a href="mailto:dhvsu.ccssc@gmail.com"><i class="fa fa-envelope"></i></a>
+                        <a href="mailto:adm1n.ccspace@gmail.com"><i class="fa fa-envelope"></i></a>
                         <a href="https://dhvsu.edu.ph/index.php/academics-menu/bacolor-campus/college-of-computer-studies"><i class="fa fa-globe"></i></a>
                     </div>
                 </div>
