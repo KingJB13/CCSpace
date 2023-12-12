@@ -27,15 +27,15 @@
     </main>
     <footer class="footer">
                 <div class="footer-col">
-                    <img src="../img/ccsp.png" height="50px" width="200px">
+                    <img src="./img/ccsp.png" height="50px" width="200px">
                 </div>
                 <div class="footer-col">
                     <h2>Company</h2>
                         <ul>
-                            <li><a href="../about-us/about-us.php">About Us</a></li>
-                            <li><a href="../about-us/mission-vision.php">Mission and Vision</a></li>
-                            <li><a href="../about-us/privacy-policy.php">Privacy Policy</a></li>
-                            <li><a href="../about-us/faqs.php">FAQ'S</a></li>
+                            <li><a href="./about-us/about-us.php">About Us</a></li>
+                            <li><a href="./about-us/mission-vision.php">Mission and Vision</a></li>
+                            <li><a href="./about-us/privacy-policy.php">Privacy Policy</a></li>
+                            <li><a href="./about-us/faqs.php">FAQ'S</a></li>
                         </ul>
                 </div>
                 <div class="footer-col">
