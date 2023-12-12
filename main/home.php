@@ -13,7 +13,260 @@ header('Location: ../index.php');
     <title>CCSpace</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../styles/nav-footer.css">
-    <link rel="stylesheet" href="../styles/homepage.css">
+    <style>
+        .container {
+            height: auto;
+            width: 100%;
+        }
+
+        .container .first-container .slide {
+            height: auto;
+            min-height: auto;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px 9%;
+        }
+
+        .container .first-container .slide .content {
+            flex: 1 1 350px;
+        }
+
+        .container .first-container .slide .image {
+            flex: 1 1 350px;
+        }
+
+        .container .first-container .slide .image img {
+            height: auto;
+            max-width: 100%;
+        }
+
+        .container .first-container .slide .content p {
+            text-align: justify;
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+            padding: 10px 0;
+        }
+
+        @media (max-width: 858px) {
+            .container .first-container .slide .content {
+                flex: 1 1 280px;
+            }
+            .container .first-container .slide .image {
+                flex: 1 1 280px;
+            }
+            .container .first-container .slide .content p{
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 790px){
+            .container .first-container .slide .content {
+                flex: 1 1 260px;
+            }
+            .container .first-container .slide .image {
+                flex: 1 1 280px;
+            }
+        }
+        @media (max-width: 768px){
+            .container .first-container .slide .content {
+                flex: 1 1 260px;
+            }
+            .container .first-container .slide .image {
+                flex: 1 1 260px;
+            }
+        }
+
+        @media (max-width: 640px){
+            .container .first-container .slide .content {
+                flex: 1 1 200px;
+            }
+            .container .first-container .slide .image {
+                display: none;  
+            }
+        }
+
+        @media (max-width: 510px){
+            .container .first-container .slide .content {
+                flex: 1 1 180px;
+            }
+            .container .first-container .slide .image {
+                display: none;
+            }
+
+        }
+        .container .second-container .slide {
+            height: auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px 9%;
+            padding-bottom: 100px;
+            
+        }
+
+        .container .second-container .slide .border {
+            background: rgba(31, 65, 114, 0.8);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .container .second-container .slide .border .content {
+            padding: 20px;
+            flex: 1 1 350px;
+        }
+
+        .container .second-container .slide .border .image {
+            padding: 20px;
+            flex: 1 1 350px;
+        }
+
+        .container .second-container .slide .border .image img {
+            height: auto;
+            max-width: 100%;
+        }
+
+        .container .second-container .slide .border .content h2 {
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            text-align: justify;
+        }
+
+        .container .second-container .slide .border .content p {
+            color: white;
+            font-size: 20px;
+            padding: 10px 0;
+            text-align: justify;
+        }
+
+        @media (max-width: 1280px){
+            
+            .container .second-container .slide .border .content h2 {
+                font-size: 20px;
+            }
+            .container .second-container .slide .border .content p {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 980px){
+            .container .second-container .slide {
+                padding: 20px 5%;
+            }
+            .container .second-container .slide .border .content h2 {
+                font-size: 18px;
+            }
+            .container .second-container .slide .border .content p {
+                font-size: 13px;
+            }
+        }
+        @media (max-width: 768px){
+            .container .second-container .slide .border .image{
+                display: none;
+            }
+
+        }
+
+        .container .third-container .slide {
+            height: auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px 9%;
+            padding-bottom: 100px;
+        }
+
+        .container .third-container .slide .benefit{
+            background: rgba(31, 65, 114, 0.8);
+            padding: 20px;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .container .third-container .slide .border {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            padding: 20px;
+            grid-gap: 40px;
+        }
+        .container .third-container .slide .border .content{
+            background: rgba(31, 65, 114, 0.8);
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .container .third-container .slide .border .content h2,
+        .container .third-container .slide .border .content p
+        {
+            color: white;
+        }
+
+        .container .fourth-container .slide {
+            height: auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px 9%;
+            padding-bottom: 100px;
+        }
+
+        .container .fourth-container .slide .content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .container .fourth-container .slide .content .border {
+            display: flex;
+            
+        }
+        .container .fourth-container .slide .content .border .img{
+            flex: 1 1 350px;
+        }  
+        .container .fourth-container .slide .content .border .content{
+            flex: 1 1 350px;
+        } 
+        .container .fourth-container .slide .content .border .content a{
+            text-decoration: none;
+            background-color: #0082e6;
+            color: white;
+            padding: 2px 4px;
+            border-radius: 5px;
+        }    
+        .container .fourth-container .slide .content .border .content a:hover{
+            color: #1F4172;
+            background-color: white;
+        }
+        .container .fourth-container .slide .content .border .img img {
+            max-width: 100%;
+            border-radius: 50px 0 0 50px;
+        }
+        @media (max-width: 768px){
+            .container .fourth-container .slide .content .border .content h2{
+                font-size: 20px;
+            }
+        }
+        @media (max-width: 586px){
+            .container .fourth-container .slide .content .border .content{
+                flex: 1 1 180px;
+            }   
+            .container .fourth-container .slide .content .border .img{
+                display: none;
+            }      
+        }
+    </style>
 </head>
 
 <body>
