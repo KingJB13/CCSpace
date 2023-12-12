@@ -84,7 +84,7 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="img"><img src="../img/school.png" alt="img"></div>
+                    <div class="img"><img src="" alt="img"></div>
                     <div class="info">
                         <h2>CS 101</h2>
                         <?php $cs = getLog('CS 101');

@@ -21,8 +21,14 @@
                     $stmt->bindParam(':subject', $subject);
                     $stmt->bindParam(':section', $section);
                     if($stmt->execute()){
-                        $result = $stmt->fetch();
-                        echo '<script>alert("Time In Success");window.location.href="room-info.php?room_name='.$room_name.'&log_id='.$log_id.'"</script>';
+                        $sql = "SELECT * FROM ccs_log WHERE room = :room AND remarks = 'Ongoing'";
+                        $state = $pdo->prepare($sql);
+                        $state->bindParam(':room', $room_name);
+                        $state->execute();
+                        $result = $state->fetch();
+                        $_SESSION['room'] = $result['room'];
+                        $_SESSION['log_id'] = $result['log_id'];
+                        echo '<script>alert("Time In Success");window.location.href="room-info.php?room_name='.$room_name.'&log_id='.$_SESSION['log_id'].'"</script>';
                         exit();
                     } else{
                         echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-in.php?schedule_id='.$schedule_id.'&room_name='.$room_name.'"</script>';

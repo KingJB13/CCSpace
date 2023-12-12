@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once '../configuration/dbcon.php';
     try{
         $log_id = $_GET['log_id'];
-        $room_name = $_GET['room_name'];
+        $room_name = $_SESSION['room'];
         $professor =$_SESSION['username'];
         $day = date('l');
         $row = null;

@@ -15,7 +15,7 @@
                     $stmt->bindParam(':log_id', $log_id);
                     if($stmt->execute()){
                         $result = $stmt->fetch();
-                        echo '<script>alert("Time Out Success");window.location.href="room-info.php?room_name='.$room_name.'&log_id='.$log_id.'"</script>';
+                        echo '<script>alert("Time Out Success");window.location.href="rooms.php"</script>';
                         exit();
                     } else{
                         echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-out.php?log_id='.$log_id.'&room_name='.$room_name.'"</script>';
