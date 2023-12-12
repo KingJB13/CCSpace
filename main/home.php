@@ -334,11 +334,10 @@ header('Location: ../index.php');
                 <div class="slide">
                     <div class="content">
                         <div class="border">
-                            <img src="../img/bb 1.png" alt="img">
-                            <h2>Are you ready to click the button and delve into the schedules of all the available rooms? Your journey to explore the school's room schedules is just a click away!</h2>
-                        </div>
-                        <div class="link">
-                            <a href="./rooms.php">Rooms</a>
+                            <div class="img"><img src="../img/bb 1.png" alt="img"></div>
+                            <div class="content">
+                                <h2>Are you ready to click the button and delve into the schedules of all the available rooms? Your journey to explore the school's room schedules is just a click away! <a href="./rooms.html">Rooms</a></h2>
+                            </div>
                         </div>
                     </div>
                 </div>
