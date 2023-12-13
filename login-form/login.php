@@ -16,7 +16,7 @@
           $password_error = 'Password must be 8 - 32 characters long';
           $errors++;
         } 
-        if($errors <=0) {
+        if($errors <= 0) {
           $sql = "SELECT * FROM ccs_user WHERE ccs_email = :email";
           $stmt = $pdo->prepare($sql);
           $stmt->bindParam(':email', $email);
@@ -45,13 +45,9 @@
           else{
               $error_message = "Error: " . $sql . "<br>" . $pdo->error;
               session_destroy();
-              echo '<script>alert("' . $error_log . '"); window.location.href = "../index.php";</script>';
+              echo '<script>alert("' . $error_message . '"); window.location.href = "../index.php";</script>';
 
           }
-        } else {
-          $errors = 0;
-          header("Refresh: 0");
-          exit();
         }
 
       }

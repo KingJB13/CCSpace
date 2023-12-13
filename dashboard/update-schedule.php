@@ -89,7 +89,7 @@ catch(PDOException $e){
                       <div class="custom_select">
                         <select id="room" name="room">
                           <option value="" disabled selected>Select</option>
-                          <option value="CS 101">CS 101</option>
+                          <option value="CS 102">CS 102</option>
                           <option value="COM LAB">COM LAB</option>
                           <option value="ICT LAB">ICT LAB</option>
                         </select>

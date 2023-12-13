@@ -48,13 +48,13 @@
                         if($stmt->execute()){
                             $result = $stmt->fetch();
                             $professor = $_SESSION['prof_name'];
-                                $query = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section, log_date,time_start,time_end, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),NOW(),NOW(),"Absent")';
-                                $stmt2 = $pdo->prepare($query);
-                                $stmt2->bindParam(':prof_name', $professor);
-                                $stmt2->bindParam(':room_name', $room_name);
-                                $stmt2->bindParam(':subject', $subject);
-                                $stmt2->bindParam(':section', $section);
-                                $stmt2->execute();
+                            $query = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section, log_date,time_start,time_end, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),NOW(),NOW(),"Absent")';
+                            $stmt2 = $pdo->prepare($query);
+                            $stmt2->bindParam(':prof_name', $professor);
+                            $stmt2->bindParam(':room_name', $room_name);
+                            $stmt2->bindParam(':subject', $subject);
+                            $stmt2->bindParam(':section', $section);
+                            $stmt2->execute();
                             echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id']."&room_name=".$result['room'].'</script>';
                             exit();
                         } else{

@@ -79,10 +79,6 @@ if(isset($_POST['register'])){
         exit();
       }
     }
-} else {
-  $errors = 0;
-  header("Refresh: 0");
-  exit();
 }
   
 }

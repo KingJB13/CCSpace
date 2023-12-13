@@ -3,23 +3,23 @@
     require_once '../configuration/dbcon.php';
 try{
     if(isset($_SESSION['ccs_id'])){
-        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '7:00' ORDER BY sched_day ASC";
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 102' AND time_start = '7:00' ORDER BY sched_day ASC";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $csseven = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '10:00' ORDER BY sched_day ASC";
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 102' AND time_start = '10:00' ORDER BY sched_day ASC";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $csten = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '13:00' ORDER BY sched_day ASC";
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 102' AND time_start = '13:00' ORDER BY sched_day ASC";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $csone = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         
-        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 101' AND time_start = '16:00' ORDER BY sched_day ASC";
+        $sql = "SELECT * FROM ccs_schedule WHERE room = 'CS 102' AND time_start = '16:00' ORDER BY sched_day ASC";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $csfour = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -150,7 +150,7 @@ catch(PDOException $e){
                 </div>
             </div>
             <table class="schedule">
-                <h2>CS 101</h2>
+                <h2>CS 102</h2>
                 <thead>
                     <th>Time</th>
                     <th>Monday</th>

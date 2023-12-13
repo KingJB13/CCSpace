@@ -77,6 +77,8 @@ require_once '../configuration/dbcon.php';
                         exit();
                     } elseif($_SESSION['prof_name'] !== $professor) {
                         $_SESSION['schedule_id'] = null;
+                        $_SESSION['subject'] = null;
+                        $_SESSION['section'] = null;
                         header("Location: time-in.php?schedule_id=");
                         exit();
                     }
@@ -168,16 +170,22 @@ require_once '../configuration/dbcon.php';
                     if(isset($message)){
                         echo '<input type="submit" value="Time In" name="time-in" disabled>';
                         echo '<input type="submit" value="Time Out" name="time-out" disabled>';
-                    } else {
-                        if(isset($logexists['log_id'])){
-                            $_SESSION['log_id'] = $logexists['log_id'];
-                            $_SESSION['room'] = $row['room'];
-                            echo '<input type="submit" value="Time In" name="time-in" disabled>';
-                            echo '<input type="submit" value="Time Out" name="time-out">';
-                        } elseif(!isset($logexists['log_id'])) {
-                            echo '<input type="submit" value="Time In" name="time-in">';
-                            echo '<input type="submit" value="Time Out" name="time-out" disabled>';
-                        } 
+                    } else { 
+                            if(isset($logexists['log_id'])){
+                                $_SESSION['log_id'] = $logexists['log_id'];
+                                $_SESSION['room'] = $row['room'];
+                                echo '<input type="submit" value="Time In" name="time-in" disabled>';
+                                echo '<input type="submit" value="Time Out" name="time-out">';
+                            } elseif(!isset($logexists['log_id'])) {
+                                if(strtotime(time()) > strtotime("19:00:00")){
+                                    echo '<input type="submit" value="Time In" name="time-in" disabled>';
+                                    echo '<input type="submit" value="Time Out" name="time-out" disabled>';
+                                } else {
+                                    echo '<input type="submit" value="Time In" name="time-in">';
+                                    echo '<input type="submit" value="Time Out" name="time-out" disabled>';
+                                }
+                                
+                            } 
                     }
                     ?>
                     </form>
@@ -209,9 +217,8 @@ require_once '../configuration/dbcon.php';
                 } else {
                     if(isset($message)){
                         echo '<h3>'.$message.'</h3>';
-                    }
-                    else{
-                        if($row !== null && isset($row['schedule_id'])){
+                    } else {
+                        if($row !== null && isset($row['schedule_id']) && date("H:i:s")){
                             $_SESSION['schedule_id'] = $row['schedule_id'];
                             $_SESSION['prof_name'] = $row['prof_name'];
                             $_SESSION['subject'] = $row['subject'];
@@ -248,9 +255,13 @@ require_once '../configuration/dbcon.php';
                                         $stmt->execute();
                                     }
                             
-                            } else {
-                                echo '<h3>Status: Vacant</h3>';
-                            }
+                                } else {
+                                    if(strtotime(time()) > strtotime("19:00:00")){
+                                        echo '<h3>Status: Closed</h3>';
+                                    } else {
+                                        echo '<h3>Status: Vacant</h3>';
+                                    }
+                                }
                         }
                     }
                 }

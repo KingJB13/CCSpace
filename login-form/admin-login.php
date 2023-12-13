@@ -40,9 +40,6 @@
               exit();
 
           }
-        } else {
-          header("Refresh: 0");
-          exit();
         }
 
       }

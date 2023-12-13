@@ -81,14 +81,16 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="img"><img src="" alt="img"></div>
+                    <div class="img"><img src="../img/CS.jpg" alt="img"></div>
                     <div class="info">
-                        <h2>CS 101</h2>
-                        <?php $cs = getLog('CS 101');
+                        <h2>CS 102</h2>
+                        <?php $cs = getLog('CS 102');
                             if($cs === null && !isset($cs['log_id'])){
-                                echo '<a href="room-info.php?room_name=CS%20101&log_id=">Information</a>';
+                                echo '<a href="room-info.php?room_name=CS%20102&log_id=">Information</a>';
+                                $_SESSION['room'] = 'CS 102';
                             } else {
-                                echo '<a href="room-info.php?room_name=CS%20101&log_id=' . $cs['log_id'] . '">Information</a>';
+                                echo '<a href="room-info.php?room_name=CS%20102&log_id=' . $cs['log_id'] . '">Information</a>';
+                                $_SESSION['room'] = 'CS 102';
                             }
                         ?>
                         
@@ -96,27 +98,31 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="img"><img src="" alt="img"></div>
+                    <div class="img"><img src="../img/COMLAB.jpg" alt="img"></div>
                     <div class="info">
                         <h2>Com Lab</h2>
                         <?php $comlab = getLog('COM LAB');
                             if($comlab === null && !isset($comlab['log_id'])){
                                 echo '<a href="room-info.php?room_name=COM%20LAB&log_id=">Information</a>';
+                                $_SESSION['room'] = 'COM LAB';
                             } else {
                                 echo '<a href="room-info.php?room_name=COM%20LAB&log_id=' . $comlab['log_id'] . '">Information</a>';
+                                $_SESSION['room'] = 'COM LAB';
                             }
                         ?>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="img"><img src="" alt="img"></div>
+                    <div class="img"><img src="../img/ICT.jpg" alt="img"></div>
                     <div class="info">
                         <h2>ICT Lab</h2>
                         <?php $ict = getLog('ICT LAB');
                             if($ict === null && !isset($ict['log_id'])){
                                 echo '<a href="room-info.php?room_name=ICT%20LAB&log_id=">Information</a>';
+                                $_SESSION['room'] = 'ICT LAB';
                             } else {
                                 echo '<a href="room-info.php?room_name=ICT%20LAB&log_id=' . $ict['log_id'] . '">Information</a>';
+                                $_SESSION['room'] = 'ICT LAB';
                             }
                         ?>
                     </div>

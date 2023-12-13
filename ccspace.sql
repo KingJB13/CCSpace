@@ -3,13 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 13, 2023 at 01:50 PM
+-- Generation Time: Dec 13, 2023 at 03:26 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+08:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -71,8 +71,8 @@ CREATE TABLE `ccs_reservation` (
 --
 
 INSERT INTO `ccs_reservation` (`reservation_id`, `prof_name`, `room`, `subject`, `section`, `sched_date`, `time_start`, `time_end`, `purpose`, `reserve_status`) VALUES
-(2192997, 'Nathaniel Mallari', 'CS 101', 'MOBDEV', 'IT 3-J', '2023-12-04', '07:00:00', '10:00:00', 'Group Activity', 'Pending'),
-(2409420, 'Justin Bais', 'CS 101', 'WEB DEV', 'IT 3-D', '2023-12-13', '10:00:00', '13:00:00', 'Lab Quiz', 'Rejected'),
+(2192997, 'Nathaniel Mallari', 'CS 102', 'MOBDEV', 'IT 3-J', '2023-12-04', '07:00:00', '10:00:00', 'Group Activity', 'Pending'),
+(2409420, 'Justin Bais', 'CS 102', 'WEB DEV', 'IT 3-D', '2023-12-13', '10:00:00', '13:00:00', 'Lab Quiz', 'Rejected'),
 (2511762, 'Carla Joy Manapsal', 'COM LAB', 'OOP', 'IT 3-C', '2023-12-08', '20:00:00', '23:00:00', 'Long Quiz', 'Accepted'),
 (2630862, 'Justin Bais', 'COM LAB', 'DBMS', 'IT 3-A', '2023-12-14', '16:00:00', '19:00:00', 'Finals Exam', 'Accepted'),
 (2979818, 'Karl Brian Mallari', 'ICT LAB', 'IAS', 'IT 3-G', '2023-12-15', '13:00:00', '16:00:00', 'Final Project Presentation', 'Rejected');
@@ -94,7 +94,7 @@ CREATE TABLE `ccs_room` (
 
 INSERT INTO `ccs_room` (`room_id`, `room_name`) VALUES
 (2413248, 'ICT LAB'),
-(2493374, 'CS 101'),
+(2493374, 'CS 102'),
 (2586119, 'COM LAB');
 
 -- --------------------------------------------------------
@@ -119,39 +119,39 @@ CREATE TABLE `ccs_schedule` (
 --
 
 INSERT INTO `ccs_schedule` (`schedule_id`, `prof_name`, `room`, `subject`, `section`, `sched_day`, `time_start`, `time_end`) VALUES
-(2005079, 'Mariella Macaspac', 'CS 101', 'WEB DEV', 'IT 3-F', 3, '10:00:00', '13:00:00'),
+(2005079, 'Mariella Macaspac', 'CS 102', 'WEB DEV', 'IT 3-F', 3, '10:00:00', '13:00:00'),
 (2008664, 'Nicole Dimacali', 'COM LAB', 'SAD', 'IT 3-E', 3, '13:00:00', '16:00:00'),
-(2030881, 'Nicole Dimacali', 'CS 101', 'SAD', 'IT 3-B', 1, '07:00:00', '10:00:00'),
+(2030881, 'Nicole Dimacali', 'CS 102', 'SAD', 'IT 3-B', 1, '07:00:00', '10:00:00'),
 (2052803, 'Joshua Lawrence Lumba', 'COM LAB', 'CSS', 'IT 3-H', 3, '07:00:00', '10:00:00'),
 (2057414, 'Mark Joseph Tayag', 'COM LAB', 'NET', 'IT 3-D', 3, '16:00:00', '19:00:00'),
 (2074027, 'Mariella Macaspac', 'COM LAB', 'WEB DEV', 'IT 3-I', 2, '16:00:00', '19:00:00'),
 (2094591, 'Karl Brian Mallari', 'ICT LAB', 'IAS', 'IT 3-K', 5, '10:00:00', '13:00:00'),
 (2104241, 'Carla Joy Manapsal', 'COM LAB', 'OOP', 'IT 3-I', 1, '16:00:00', '19:00:00'),
 (2158227, 'Justin Bais', 'ICT LAB', 'DBMS', 'IT 3-F', 3, '07:00:00', '10:00:00'),
-(2198334, 'Nicole Dimacali', 'CS 101', 'SAD', 'IT 3-C', 2, '10:00:00', '13:00:00'),
+(2198334, 'Nicole Dimacali', 'CS 102', 'SAD', 'IT 3-C', 2, '10:00:00', '13:00:00'),
 (2207466, 'Justin Bais', 'ICT LAB', 'DBMS', 'IT 3-C', 5, '07:00:00', '10:00:00'),
 (2227708, 'Justin Bais', 'COM LAB', 'DBMS', 'IT 3-G', 2, '10:00:00', '13:00:00'),
 (2228043, 'Justin Bais', 'ICT LAB', 'DBMS', 'IT 3-K', 6, '07:00:00', '10:00:00'),
-(2235440, 'Justin Bais', 'CS 101', 'DBMS', 'IT 3-D', 1, '13:00:00', '16:00:00'),
+(2235440, 'Justin Bais', 'CS 102', 'DBMS', 'IT 3-D', 1, '13:00:00', '16:00:00'),
 (2300458, 'Justin Bais', 'COM LAB', 'DBMS', 'IT 3-K', 1, '07:00:00', '10:00:00'),
-(2308220, 'Nathaniel Mallari', 'CS 101', 'MOB DEV', 'IT 3-C', 6, '07:00:00', '10:00:00'),
+(2308220, 'Nathaniel Mallari', 'CS 102', 'MOB DEV', 'IT 3-C', 6, '07:00:00', '10:00:00'),
 (2310984, 'Mark Joseph Tayag', 'ICT LAB', 'NET', 'IT 3-A', 1, '07:00:00', '10:00:00'),
 (2313916, 'Mariella Macaspac', 'ICT LAB', 'WEB DEV', 'IT 3-I', 3, '10:00:00', '13:00:00'),
-(2328863, 'Karl Brian Mallari', 'CS 101', 'IAS', 'IT 3-A', 1, '10:00:00', '13:00:00'),
+(2328863, 'Karl Brian Mallari', 'CS 102', 'IAS', 'IT 3-A', 1, '10:00:00', '13:00:00'),
 (2362646, 'Nicole Dimacali', 'COM LAB', 'DBMS', 'IT 3-C', 4, '07:00:00', '10:00:00'),
 (2411136, 'Joshua Lawrence Lumba', 'ICT LAB', 'CSS', 'IT 3-E', 2, '16:00:00', '19:00:00'),
-(2430395, 'Nathaniel Mallari', 'CS 101', 'MOB DEV', 'IT 3-F', 5, '10:00:00', '13:00:00'),
-(2444188, 'Nathaniel Mallari', 'CS 101', 'MOB DEV', 'IT 3-E', 2, '13:00:00', '16:00:00'),
+(2430395, 'Nathaniel Mallari', 'CS 102', 'MOB DEV', 'IT 3-F', 5, '10:00:00', '13:00:00'),
+(2444188, 'Nathaniel Mallari', 'CS 102', 'MOB DEV', 'IT 3-E', 2, '13:00:00', '16:00:00'),
 (2448581, 'Carla Joy Manapsal', 'COM LAB', 'OOP', 'IT 3-A', 5, '10:00:00', '13:00:00'),
 (2488691, 'Karl Brian Mallari', 'COM LAB', 'IAS', 'IT 3-J', 1, '13:00:00', '16:00:00'),
 (2577249, 'Joshua Lawrence Lumba', 'COM LAB', 'CSS', 'IT 3-G', 5, '13:00:00', '16:00:00'),
 (2596524, 'Mark Joseph Tayag', 'ICT LAB', 'NET', 'IT 3-D', 1, '16:00:00', '19:00:00'),
 (2607268, 'Nicole Dimacali', 'ICT LAB', 'SAD', 'IT 3-H', 4, '10:00:00', '13:00:00'),
 (2618236, 'Justin Bais', 'ICT LAB', 'DBMS', 'IT 3-G', 2, '07:00:00', '10:00:00'),
-(2686789, 'Joshua Lawrence Lumba', 'CS 101', 'CSS', 'IT 3-B', 5, '16:00:00', '19:00:00'),
+(2686789, 'Joshua Lawrence Lumba', 'CS 102', 'CSS', 'IT 3-B', 5, '16:00:00', '19:00:00'),
 (2826341, 'Mariella Macaspac', 'COM LAB', 'WEB DEV', 'IT 3-F', 4, '10:00:00', '13:00:00'),
-(2880173, 'Joshua Lawrence Lumba', 'CS 101', 'CSS', 'IT 3-G', 4, '07:00:00', '10:00:00'),
-(2885973, 'Mark Joseph Tayag', 'CS 101', 'NET', 'IT 3-D', 4, '16:00:00', '19:00:00'),
+(2880173, 'Joshua Lawrence Lumba', 'CS 102', 'CSS', 'IT 3-G', 4, '07:00:00', '10:00:00'),
+(2885973, 'Mark Joseph Tayag', 'CS 102', 'NET', 'IT 3-D', 4, '16:00:00', '19:00:00'),
 (2936430, 'Mark Joseph Tayag', 'ICT LAB', 'NET', 'IT 3-J', 4, '07:00:00', '10:00:00'),
 (2987438, 'Joshua Lawrence Lumba', 'ICT LAB', 'CSS', 'IT 3-B', 1, '10:00:00', '13:00:00'),
 (3819738, 'Joshua Lawrence Lumba', 'COM LAB', 'CSS', 'IT 3-B', 4, '16:00:00', '19:00:00');

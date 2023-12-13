@@ -138,7 +138,7 @@
     <main>
     <div class="info">
             <div class="nav">
-                <div class="left"><h2>Time In</h2></div>
+                <div class="left"><h2>Time Out</h2></div>
             </div>
             <div class="content">
                 <video id="preview"></video>
