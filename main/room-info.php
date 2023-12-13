@@ -67,7 +67,7 @@ require_once '../configuration/dbcon.php';
             $stmt->bindParam(':room_name', $room_name);
             $stmt->execute();
             $logexists = $stmt->fetch(PDO::FETCH_ASSOC);
-            
+
             if(isset($_POST['time-in'])){
                 if(isset($message)){
                     echo '<script>alert("'.$message.'")</script>';
@@ -233,16 +233,21 @@ require_once '../configuration/dbcon.php';
                             echo (!$log_id) ? '<h3>Status: Vacant</h3>' : '<h3>Status: Occupied</h3>';
                             
                         } else {
-                            if(!isset($log_id)){
-                                if(isset($logexists)){
+                                if(isset($logexists['log_id'])){
                                     echo '<h3>Professor Name: '. $logexists['prof_name'] .'</h3>';
                                     echo '<h3>Room: '. $logexists['room'] .'</h3>';
                                     echo '<h3>Subject: '. $row['subject'] .'</h3>';
-                                    echo '<h3>Section: '. $log_exists['section'] .'</h3>';
+                                    echo '<h3>Section: '. $logexists['section'] .'</h3>';
                                     echo '<h3>Time Start: '. $logexists['time_start'] .'</h3>';
-                                    echo '<h3>Time End: '. $log_exists['time_end'] .'</h3>';
+                                    echo '<h3>Time End: '. $logexists['time_end'] .'</h3>';
                                     echo '<h3>Status: Occupied</h3>';
-                                }
+                                    if ($row['time_end'] >= date("H:i:s A") || $reserve['time_end'] >= date("H:i:s A")) {
+                                        $sql = "UPDATE ccs_log SET time_end = NOW(), remarks = 'Present' WHERE log_id = :log_id";
+                                        $stmt = $pdo->prepare($sql);
+                                        $stmt->bindParam(":log_id", $logexists['log_id']);
+                                        $stmt->execute();
+                                    }
+                            
                             } else {
                                 echo '<h3>Status: Vacant</h3>';
                             }
