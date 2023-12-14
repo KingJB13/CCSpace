@@ -177,7 +177,7 @@ require_once '../configuration/dbcon.php';
                                 echo '<input type="submit" value="Time In" name="time-in" disabled>';
                                 echo '<input type="submit" value="Time Out" name="time-out">';
                             } elseif(!isset($logexists['log_id'])) {
-                                if(strtotime(time()) > strtotime("19:00:00")){
+                                if(strtotime(time()) > strtotime("19:00:00") || strtotime(time()) < strtotime("7:00:00")){
                                     echo '<input type="submit" value="Time In" name="time-in" disabled>';
                                     echo '<input type="submit" value="Time Out" name="time-out" disabled>';
                                 } else {
@@ -248,7 +248,7 @@ require_once '../configuration/dbcon.php';
                                     echo '<h3>Time Start: '. $logexists['time_start'] .'</h3>';
                                     echo '<h3>Time End: '. $logexists['time_end'] .'</h3>';
                                     echo '<h3>Status: Occupied</h3>';
-                                    if ($row['time_end'] >= date("H:i:s A") || $reserve['time_end'] >= date("H:i:s A")) {
+                                    if ($row['time_end'] >= date("H:i:s") || $reserve['time_end'] >= date("H:i:s")) {
                                         $sql = "UPDATE ccs_log SET time_end = NOW(), remarks = 'Present' WHERE log_id = :log_id";
                                         $stmt = $pdo->prepare($sql);
                                         $stmt->bindParam(":log_id", $logexists['log_id']);

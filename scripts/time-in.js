@@ -12,6 +12,7 @@
 
     scanner.addListener('scan',function(c){
         document.getElementById('text').value = c;
+        document.getElementById('status').value = "Success";
         return false;
     });
 
@@ -28,6 +29,7 @@
             if (result && result.length > 0 && result[0].symbol && result[0].symbol.length > 0 && result[0].symbol[0].data) {
                 const scannedData = result[0].symbol[0].data;
                 document.getElementById('text').value = scannedData;
+                document.getElementById('status').value = "Success";
                 return false;
             } else {
                 throw new Error("Invalid response format");

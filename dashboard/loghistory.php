@@ -4,7 +4,7 @@
 
 try{
     if(isset($_SESSION['ccs_id']) && $_SESSION['position'] == 'Admin'){
-        $sql = "SELECT * FROM ccs_log ORDER BY log_date DESC";
+        $sql = "SELECT * FROM ccs_log ORDER BY log_date DESC LIMIT 25";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

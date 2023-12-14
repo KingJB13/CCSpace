@@ -4,7 +4,7 @@
 try{
     if(isset($_SESSION['ccs_id'])){
         $prof_name = $_SESSION['username'];
-        $sql = "SELECT * FROM ccs_log WHERE prof_name = :name ORDER BY log_date DESC";
+        $sql = "SELECT * FROM ccs_log WHERE prof_name = :name ORDER BY log_date DESC LIMIT 25";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':name', $prof_name);
         $stmt->execute();

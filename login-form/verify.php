@@ -26,6 +26,7 @@
             $stmt -> bindParam(':position', $position);
             if($stmt->execute()){
                 echo '<script>alert("Account Created Successfully");window.location.href = "login.php";</script>';
+                session_destroy();
                 exit();
             }
             else{

@@ -145,7 +145,8 @@
                 <form action="time-out.php" method="POST">
                 <label><h3>No Camera? Upload file instead</h3></label>
                 <input type="file" name="file" id="file" accept="image/*">
-                <input type="text" name="text" id="text" readonly class="text">
+                <input type="hidden" name="text" id="text">
+                <input type="text" id="status" class="text" readonly>
                 <input type="submit" value="submit" name="timeout" class="submit">
                 </form>
             </div>

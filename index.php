@@ -1,3 +1,11 @@
+<!-- <?php
+    //  if ($_SERVER['SERVER_NAME'] === 'localhost' || $_SERVER['SERVER_ADDR'] === '127.0.0.1') {
+    //     $this->url = "http://localhost/CCSpace";
+    // } else {
+    //     // Set the URL for the web host
+    //     // $this->url = "";
+    // }
+?> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,15 +19,9 @@
     text-align: center;
     }
 
-    .card {
-        background: rgba(31, 65, 114, 0.8);
-        padding: 100px 300px;
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
     .card h2{
         font-size: 30px;
-        color: white;
+        color: black;
     }
     .top-image {
         width: 100%;

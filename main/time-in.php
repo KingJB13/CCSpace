@@ -48,15 +48,20 @@
                         if($stmt->execute()){
                             $result = $stmt->fetch();
                             $professor = $_SESSION['prof_name'];
-                            $query = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section, log_date,time_start,time_end, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),NOW(),NOW(),"Absent")';
-                            $stmt2 = $pdo->prepare($query);
-                            $stmt2->bindParam(':prof_name', $professor);
-                            $stmt2->bindParam(':room_name', $room_name);
-                            $stmt2->bindParam(':subject', $subject);
-                            $stmt2->bindParam(':section', $section);
-                            $stmt2->execute();
-                            echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id']."&room_name=".$result['room'].'</script>';
-                            exit();
+                            if($professor === null){
+                                echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id']."&room_name=".$result['room'].'</script>';
+                                exit();
+                            } else {
+                                $query = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section, log_date,time_start,time_end, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),NOW(),NOW(),"Absent")';
+                                $stmt2 = $pdo->prepare($query);
+                                $stmt2->bindParam(':prof_name', $professor);
+                                $stmt2->bindParam(':room_name', $room_name);
+                                $stmt2->bindParam(':subject', $subject);
+                                $stmt2->bindParam(':section', $section);
+                                $stmt2->execute();
+                                echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id']."&room_name=".$result['room'].'</script>';
+                                exit();
+                            }
                         } else{
                             echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-in.php?schedule_id="'.$schedule_id.'</script>';
                             exit();
@@ -181,7 +186,8 @@
                 <form action="time-in.php" method="POST">
                 <label><h3>No Camera? Upload file instead</h3></label>
                 <input type="file" name="file" id="file" accept="image/*">
-                <input type="text" name="text" id="text" readonly class="text">
+                <input type="hidden" name="text" id="text">
+                <input type="text" id="status" class="text" readonly>
                 <input type="submit" value="submit" name="timein" class="submit">
                 </form>
             </div>
