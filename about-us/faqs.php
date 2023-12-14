@@ -54,42 +54,42 @@
                         <p>Q: How do I access the schedule and time log in the web system?</p>
                         <br>
                         <p>A: Log in to your account and navigate to the "Schedule" or "Audit Trail section on the dashboard.</p>
-                        <br>
+                        <br><br>
                         <p>Q: Can I add my schedule in the web system?</p>
                         <br>
                         <p>A: No, but you can send a request to the admin through our reservation form.</p>
-                        <br>
+                        <br><br>
                         <p>Q: Is it possible to set reminders for upcoming events in the schedule?</p>
                         <br>
                         <p>A: No, the purpose of the website is to provide information and ask for reservation</p>
-                        <br>
+                        <br><br>
                         <p>Q: How can I log my working hours using the time log feature?</p>
                         <br>
                         <p>A: You can scan the qr code in the classroom and it will log in or log out based on the status of the room.</p>
-                        <br>
+                        <br><br>
                         <p>Q: Is there a way to share my schedule with team members?</p>
                         <br>
                         <p>A: You can see which professor is scheduled on the room.</p>
-                        <br>
+                        <br><br>
                         <p>Q: What happens if I forget to log my time for a particular day?</p>
                         <br>
                         <p>A: You will be considered absent but if you actually forgot to log, you can directly go to admin office to correct this.</p>
-                        <br>
+                        <br><br>
                         <p>Q: Are there reporting tools to analyze time usage and productivity?</p>
                         <br>
                         <p>A: Yes, your dashboard will tell you about how often you get in your classes early and late.</p>
-                        <br>
+                        <br><br>
                         <p>Q: How secure is my schedule and time log data in the web system?</p>
                         <br>
                         <p>A: Your data is securely stored and protected. The web system employs encryption and other security measures to safeguard your schedule and time log information.</p>
-                        <br>
+                        <br><br>
                         <p>Q: How do i scan qr code?</p>
                         <br>
                         <p>A: Click the qr-code icon and pick a scanning method either upload image or scan through camera</p>
-                        <br>
+                        <br><br>
                         <p>Q: How do i know if i have logged in or logged out?</p>
                         <br>
-                        <p>If the initial status is vacant then after you scanned it became occupied, it means that you have successfully logged in and vice versa</p>
+                        <p>A: If the initial status is vacant then after you scanned it became occupied, it means that you have successfully logged in and vice versa</p>
                     </div>
                 </div>
             </main>
