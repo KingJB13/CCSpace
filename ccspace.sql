@@ -3,13 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2023 at 06:38 AM
+-- Generation Time: Dec 15, 2023 at 06:45 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+08:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -52,6 +52,7 @@ INSERT INTO `ccs_log` (`log_id`, `prof_name`, `room`, `subject`, `section`, `log
 (2309903, 'Joshua Lawrence Lumba', 'ICT LAB', NULL, NULL, '2023-12-15', '13:14:38', '13:14:38', 'Absent'),
 (2388366, 'Joshua Lawrence Lumba', 'ICT LAB', NULL, NULL, '2023-12-15', '13:17:21', '13:17:21', 'Absent'),
 (2442846, 'Joshua Lawrence Lumba', 'ICT LAB', NULL, NULL, '2023-12-15', '13:17:13', '13:17:13', 'Absent'),
+(2478393, 'Joshua Lawrence Lumba', 'COM LAB', 'CSS', 'IT 3-G', '2023-12-15', '13:45:05', '13:45:17', 'Present'),
 (2639257, 'Justin Bais', 'COM LAB', 'DBMS', 'IT 3-G', '2023-12-12', '11:06:56', '11:07:08', 'Present'),
 (2669338, 'Joshua Lawrence Lumba', 'ICT LAB', NULL, NULL, '2023-12-15', '13:17:53', '13:17:53', 'Absent'),
 (2672498, 'Nathaniel Mallari', 'CS 102', 'MOB DEV', 'IT 3-F', '2023-12-15', '10:53:53', '10:54:31', 'Present'),
@@ -62,18 +63,6 @@ INSERT INTO `ccs_log` (`log_id`, `prof_name`, `room`, `subject`, `section`, `log
 (2902165, 'Joshua Lawrence Lumba', 'ICT LAB', NULL, NULL, '2023-12-15', '13:16:36', '13:16:36', 'Absent'),
 (2934170, 'Karl Brian Mallari', 'ICT LAB', NULL, NULL, '2023-12-15', '12:40:46', '12:40:46', 'Absent'),
 (2937277, 'Nathaniel Mallari', 'CS 102', 'MOB DEV', 'IT 3-F', '2023-12-15', '12:55:45', '12:56:06', 'Present');
-
---
--- Triggers `ccs_log`
---
-DELIMITER $$
-CREATE TRIGGER `after_log` AFTER INSERT ON `ccs_log` FOR EACH ROW BEGIN
-	IF(NOW() > '07:00:00' OR NOW() > '10:00:00' OR NOW() > '13:00:00' OR NOW() > '16:00:00' OR NOW() > '19:00:00') THEN
-    	UPDATE ccs_log SET time_end = NOW(), remarks = 'Present' WHERE remarks = 'Ongoing';
-    END IF;
-END
-$$
-DELIMITER ;
 
 -- --------------------------------------------------------
 
