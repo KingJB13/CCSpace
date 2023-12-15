@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once '../configuration/dbcon.php';
     try{
         $log_id = $_GET['log_id'];
-        $room_name = $_SESSION['room'];
+        $room_name = $_GET['room_name'];
         $professor =$_SESSION['username'];
         $day = date('l');
         $row = null;
@@ -177,7 +177,7 @@ require_once '../configuration/dbcon.php';
                                 echo '<input type="submit" value="Time In" name="time-in" disabled>';
                                 echo '<input type="submit" value="Time Out" name="time-out">';
                             } elseif(!isset($logexists['log_id'])) {
-                                if(strtotime(time()) < strtotime("19:00:00") || strtotime(time()) < strtotime("7:00:00")){
+                                if(strtotime(time()) < strtotime("19:00:00") || strtotime(time()) < strtotime("07:00:00")){
                                     echo '<input type="submit" value="Time In" name="time-in" disabled>';
                                     echo '<input type="submit" value="Time Out" name="time-out" disabled>';
                                 } else {
@@ -256,7 +256,7 @@ require_once '../configuration/dbcon.php';
                                     }
                             
                                 } else {
-                                    if(strtotime(time()) > strtotime("19:00:00")){
+                                    if(strtotime(time()) < strtotime("19:00:00")||strtotime(time())< strtotime("07:00:00")){
                                         echo '<h3>Status: Closed</h3>';
                                     } else {
                                         echo '<h3>Status: Vacant</h3>';

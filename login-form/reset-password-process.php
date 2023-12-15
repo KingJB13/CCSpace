@@ -22,7 +22,7 @@ try{
       }
       if($new_password !== $confirm_password){
         $confirmerror = 'Passwords do not match';
-        $errors++
+        $errors++;
       }
 
       if($errors <=0 ){

@@ -20,6 +20,11 @@
             $result = $stmt->fetch();
 
             if(strlen($currentpassword) < 8 || strlen($currentpassword) > 32 || strlen($newpassword) < 8 || strlen($newpassword) > 32){
+              $msg = "Password must be 8 - 32 characters long";
+              $current_error = $msg;
+              $new_error = $msg;
+            }
+            else {
               if(password_verify($currentpassword, $result['ccs_password'])){
                 if($newpassword === $confirmpassword){
                   $passwordhash = password_hash($confirmpassword, PASSWORD_BCRYPT);
@@ -36,11 +41,6 @@
               } else {
                 $current_error = "Password is incorrect";
               }
-            }
-            else {
-              $msg = "Password must be 8 - 32 characters long";
-              $current_error = $msg;
-              $new_error = $msg;
             }
         }            
       }

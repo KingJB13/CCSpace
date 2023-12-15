@@ -14,6 +14,9 @@ try{
         $result = $stmt->fetch();
 
         if(strlen($password) < 8 || strlen($password) > 32){
+          $error_message = "Password must be between 8 and 32 characters long.";
+        } else {
+          
           if(password_verify($password, $result['ccs_password'])){
             $id = $_SESSION['ccs_id'];
                 $sql = "DELETE FROM ccs_user WHERE ccs_id = :id";
@@ -28,8 +31,6 @@ try{
           } else {
               $error_message = "Current password is incorrect";
           }
-        } else {
-          $error_message = "Password must be between 8 and 32 characters long.";
         }  
     }  
   }
