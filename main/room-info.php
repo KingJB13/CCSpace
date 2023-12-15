@@ -247,6 +247,7 @@ require_once '../configuration/dbcon.php';
                                     echo '<h3>Status: Closed</h3>';
                                 } else {
                                     echo '<h3>Status: Vacant</h3>';
+                                    $_SESSION['schedule_id'] = null;
                                 }
 
                         }
