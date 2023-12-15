@@ -38,38 +38,6 @@
                     echo '<script>alert("QR Code does not match");window.location.href="time-in.php?schedule_id='.$schedule_id.'&room_name='.$room_name.'"</script>';
                     exit();
                 }
-            }
-            elseif(!isset($schedule_id)){
-                    if(password_verify($room_name, $text)){
-                        $sql = 'INSERT INTO ccs_log(log_id, prof_name, room,log_date, time_start, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, NOW(),NOW(),"Ongoing")';
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->bindParam(':prof_name', $profname);
-                        $stmt->bindParam(':room_name', $room_name);
-                        if($stmt->execute()){
-                            $result = $stmt->fetch();
-                            $professor = $_SESSION['prof_name'];
-                            if($professor === null){
-                                echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id']."&room_name=".$result['room'].'</script>';
-                                exit();
-                            } else {
-                                $query = 'INSERT INTO ccs_log(log_id, prof_name, room, subject, section, log_date,time_start,time_end, remarks) VALUES (FLOOR(RAND() * (3000000 - 2000000 + 1) + 2000000), :prof_name, :room_name, :subject, :section, NOW(),NOW(),NOW(),"Absent")';
-                                $stmt2 = $pdo->prepare($query);
-                                $stmt2->bindParam(':prof_name', $professor);
-                                $stmt2->bindParam(':room_name', $room_name);
-                                $stmt2->bindParam(':subject', $subject);
-                                $stmt2->bindParam(':section', $section);
-                                $stmt2->execute();
-                                echo '<script>alert("Time In Success");window.location.href="room-info.php?log_id="'.$result['log_id']."&room_name=".$result['room'].'</script>';
-                                exit();
-                            }
-                        } else{
-                            echo '<script>alert("Error: '.$stmt->error().'");window.location.href="time-in.php?schedule_id="'.$schedule_id.'</script>';
-                            exit();
-                        }
-                    } else {
-                        echo '<script>alert("QR Code does not match");window.location.href="time-in.php?schedule_id="'.$schedule_id.'</script>';
-                        exit();
-                    }
             } else {
                 header("Location: rooms.php");
                 exit();

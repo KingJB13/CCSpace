@@ -75,11 +75,8 @@ require_once '../configuration/dbcon.php';
                     if($_SESSION['prof_name'] === $professor){
                         header("Location: time-in.php?schedule_id=".$_SESSION['schedule_id']."");
                         exit();
-                    } elseif($_SESSION['prof_name'] !== $professor) {
-                        $_SESSION['schedule_id'] = null;
-                        $_SESSION['subject'] = null;
-                        $_SESSION['section'] = null;
-                        header("Location: time-in.php?schedule_id=");
+                    } else {
+                        header("Location: rooms.php");
                         exit();
                     }
                 }
@@ -260,11 +257,15 @@ require_once '../configuration/dbcon.php';
                                     }
                             
                                 } else {
-                                    if(strtotime(time()) < strtotime("19:00:00")||strtotime(time())< strtotime("07:00:00")){
-                                        echo '<h3>Status: Closed</h3>';
-                                    } else {
-                                        echo '<h3>Status: Vacant</h3>';
-                                    }
+                                    $sql = "SELECT DATE_FORMAT(NOW(), '%h:%i:%s') AS time_now";
+                                    $stmt = $pdo->prepare($sql);
+                                    $stmt->execute();
+                                    $time = $stmt->fetch();
+                                    if($time > "19:00:00" && $time < "07:00:00"){
+                                            echo '<h3>Status: Closed</h3>';
+                                        } else {
+                                            echo '<h3>Status: Vacant</h3>';
+                                        }
                                 }
                         }
                     }
