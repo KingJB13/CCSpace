@@ -182,7 +182,6 @@ require_once '../configuration/dbcon.php';
                                 $stmt->execute();
                                 $time = $stmt->fetch();
                                 if($time > "19:00:00" && $time < "07:00:00"){
-                                    echo $time['time_now'];
                                     echo '<input type="submit" value="Time In" name="time-in" disabled>';
                                     echo '<input type="submit" value="Time Out" name="time-out" disabled>';
                                 } else {
